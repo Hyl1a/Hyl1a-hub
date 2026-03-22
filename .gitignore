@@ -1,0 +1,5 @@
+node_modules/
+database.sqlite
+.env
+.DS_Store
+mii-creator/node_modules/

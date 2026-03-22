@@ -1,0 +1,79 @@
+/* 
+  Responsive Overrides for Mobile and Tablets
+*/
+
+@media screen and (max-width: 900px) {
+  #app-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 15px !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  /* Scale down auth overlay and center properly */
+  .auth-logo {
+    width: 300px !important;
+  }
+  
+  #auth-overlay > div:nth-of-type(3) {
+    width: 90% !important;
+    padding: 30px 20px !important;
+  }
+
+  /* Compact top bar */
+  #top-bar {
+    top: 5px;
+  }
+  #dynamic-title-pill {
+    font-size: 14px;
+    padding: 6px 15px;
+  }
+
+  /* Make app grid tiny, 2 columns */
+  #app-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 20px !important;
+  }
+
+  .grid-tile {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  /* Restructure lower elements so visualizer info is stacked */
+  .modern-visualizer-ui {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px;
+    padding: 0 10px !important;
+  }
+
+  #vis-track-title {
+    font-size: 14px !important;
+    text-align: center;
+  }
+
+  .vis-track-subtitle {
+    text-align: center;
+  }
+
+  .welcome-marquee-container {
+    bottom: 90px !important;
+  }
+
+  #companion-widget {
+    bottom: 120px;
+    right: 10px;
+    transform: scale(0.8);
+  }
+
+  /* Adjust OS generic Windows */
+  .os-window {
+    width: 95% !important;
+    height: 80vh !important;
+    max-width: none !important;
+    max-height: none !important;
+  }
+}
