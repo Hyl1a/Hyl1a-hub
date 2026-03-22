@@ -112,19 +112,38 @@ const CarouselManager = {
     const titlePill = document.getElementById('floating-title-pill');
     
     if (titlePill && titleText && title) {
+      // Update app description if available
+      const description = tile.getAttribute('data-description');
+      const descBox = document.getElementById('app-description-box');
+      const descText = document.getElementById('app-description-text');
+
       // Only animate if the title is actually changing
       if (titleText.textContent !== title) {
         titlePill.style.opacity = '0'; // force fade out
+        if (descBox) descBox.style.opacity = '0';
         
         // Wait for fade out, change text, then fade in
         setTimeout(() => {
           titleText.textContent = title;
           titlePill.style.opacity = '1';
           titlePill.classList.remove('hidden');
+
+          if (descBox && descText && description) {
+            descText.textContent = description;
+            descBox.classList.remove('hidden');
+            descBox.style.opacity = '1';
+          } else if (descBox) {
+            descBox.classList.add('hidden');
+          }
         }, 150); // Fast 150ms fade
       } else {
         titlePill.style.opacity = '1';
         titlePill.classList.remove('hidden');
+        if (descBox && description) {
+          descBox.classList.remove('hidden');
+          descBox.style.opacity = '1';
+          if (descText) descText.textContent = description;
+        }
       }
     }
 
@@ -165,11 +184,11 @@ const CarouselManager = {
       const x = newOffset * this.tileSpacing;
       const isActive = (i === this.currentIndex);
 
-      // Scale: active = 1.03, neighbors = 0.95, far = 0.88
+      // Scale: active = 1.15, neighbors = 0.95, far = 0.88
       const absOffset = Math.abs(newOffset);
       let scale;
       if (isActive) {
-        scale = 1.03;
+        scale = 1.15;
       } else if (absOffset <= 1) {
         scale = 0.95;
       } else if (absOffset <= 2) {
