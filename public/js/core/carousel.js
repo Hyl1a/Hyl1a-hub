@@ -41,6 +41,10 @@ const CarouselManager = {
       if (document.getElementById('auth-overlay').style.display !== 'none') return;
       if (document.body.classList.contains('app-open-active')) return;
       if (document.querySelector('.mii-fullscreen-container')) return;
+      
+      const socialOverlay = document.getElementById('social-overlay');
+      if (socialOverlay && !socialOverlay.classList.contains('hidden')) return;
+
       if (Math.abs(e.deltaY) < 10) return;
 
       if (e.deltaY > 0) this.next();

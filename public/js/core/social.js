@@ -254,11 +254,13 @@ window.SocialSystem = {
       const isOnline = item.lastActive ? (Date.now() - new Date(item.lastActive).getTime() < 300000) : false; // 5 mins
       const statusClass = isOnline ? 'online' : 'offline';
 
+      const displayName = item.first_name || ''; // Show nothing if no first name as requested
+
       card.innerHTML = `
         <div class="friend-status-dot ${statusClass}"></div>
-        <div class="friend-name">${item.username}<span class="friend-tag">#${item.tag}</span></div>
-        <div class="friend-bio-small">${item.bio}</div>
-        <div class="friend-gender">${item.gender}</div>
+        <div class="friend-name">${displayName}<span class="friend-tag">#${item.tag}</span></div>
+        <div class="friend-bio-small">${item.bio || ""}</div>
+        <div class="friend-gender">${item.gender || ""}</div>
         ${addButtonHtml}
       `;
 
@@ -387,8 +389,9 @@ window.SocialSystem = {
     imgObj.style.transform = 'scale(0.95)';
     
     setTimeout(async () => {
+      const displayFocusName = friend.first_name || "";
       const nameEl = document.getElementById('stat-display-name');
-      if (nameEl) nameEl.innerHTML = `${friend.username}<span style="opacity:0.6; font-size:0.7em;">#${friend.tag}</span>`;
+      if (nameEl) nameEl.innerHTML = `${displayFocusName}<span style="opacity:0.6; font-size:0.7em;">#${friend.tag}</span>`;
       
       const bioEl = document.getElementById('stat-bio');
       if (bioEl) bioEl.textContent = friend.bio || "Explorateur Hylia Plaza";

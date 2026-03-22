@@ -914,6 +914,10 @@ async function initMiiMaker(container, gender = 0) {
       const docRef = window.Firestore.doc(window.FirebaseDB, "avatars", fbUser.uid);
       await window.Firestore.setDoc(docRef, data, { merge: true });
 
+      // Sync first_name to the main user profile for quick social list access
+      const userRef = window.Firestore.doc(window.FirebaseDB, "users", fbUser.uid);
+      await window.Firestore.updateDoc(userRef, { first_name: data.first_name || "" });
+
       if (typeof AudioManager !== 'undefined') AudioManager.playPop();
       saveBtn.textContent = "Saved!";
 
