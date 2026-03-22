@@ -57,8 +57,10 @@ window.SocialSystem = {
           </div>
           <div style="margin-bottom: 15px;">
             <div class="stat-card">
-          <div class="stat-label">Status du Compte</div>
-          <div class="stat-value" style="color: #6adae4;">Aventurier Plaza</div>
+              <div class="stat-label">Statut du Compte</div>
+              <div class="stat-value" style="color: #6adae4;">Aventurier Plaza</div>
+            </div>
+          </div>
         </div>
         
         <button onclick="window.Auth.logout()" style="margin-top: 20px; padding: 12px; width: 100%; background: #ff6b6b; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(255,107,107,0.3);">Déconnexion</button>
