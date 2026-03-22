@@ -63,9 +63,15 @@ window.SocialSystem = {
       document.getElementById('social-list').innerHTML = `
         <div class="friend-card active" style="cursor:default; margin-bottom: 20px;">
           <div class="friend-name" style="font-size: 22px;">${currentUser}<span class="friend-tag">#${currentTag}</span></div>
-          <div class="friend-gender" style="margin-top:5px; font-size:14px; color:#5f6f82;">Mon Compte Interactif</div>
         </div>
         <div style="padding: 10px 20px; color: #5f6f82; font-weight: 700;">
+          <div style="margin-bottom: 15px;">
+            <div style="font-size: 11px; text-transform: uppercase; opacity: 0.6; margin-bottom: 5px;">Statut de compte</div>
+            <div style="display:flex; gap: 8px;">
+               <input type="text" id="user-status-input" placeholder="Que faites-vous ?" maxlength="60" style="flex:1; padding: 8px 12px; border-radius: 12px; border: 1.5px solid rgba(0,0,0,0.1); font-family: inherit;">
+               <button onclick="SocialSystem.updateMyStatus()" style="padding: 8px 15px; background: #3a7bd5; color:white; border:none; border-radius: 12px; font-weight: 700; cursor: pointer;">OK</button>
+            </div>
+          </div>
           <div style="margin-bottom: 15px;">
             <div style="font-size: 11px; text-transform: uppercase; opacity: 0.6;">Localisation</div>
             <div style="font-size: 16px;">France</div>
@@ -74,17 +80,15 @@ window.SocialSystem = {
             <div style="font-size: 11px; text-transform: uppercase; opacity: 0.6;">Dernière Connexion</div>
             <div style="font-size: 16px;">En ligne maintenant</div>
           </div>
-          <div style="margin-bottom: 15px;">
-            <div class="stat-card">
-              <div class="stat-label">Statut du Compte</div>
-              <div class="stat-value" style="color: #6adae4;">Aventurier Plaza</div>
-            </div>
-          </div>
         </div>
         
         <button onclick="window.Auth.logout()" style="margin-top: 20px; padding: 12px; width: 100%; background: #ff6b6b; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(255,107,107,0.3);">Déconnexion</button>
       `;
       
+      // Load and show current status in input
+      this.loadMyStatus();
+      
+      this.resetRightCol(); // Show Mii on the right
       // Fetch Real Mii
       this.fetchUserMii(currentUser, currentTag);
 
@@ -106,11 +110,49 @@ window.SocialSystem = {
       document.getElementById('btn-messages').classList.add('active');
       header.textContent = "Messages Privés";
       leftCol.style.opacity = '1';
-      this.resetRightCol(); // Restore Mii Focus Zone
+      this.resetRightCol(); 
       this.renderPrivateMessagesList(listInner);
     } else {
-      // For profile and friends, ensure right col is Mii Focus
+      // For profile, friends, etc.
       this.resetRightCol();
+    }
+  },
+
+  async updateMyStatus() {
+    const input = document.getElementById('user-status-input');
+    if (!input || !window.Auth?.currentUser) return;
+    const status = input.value.trim();
+    
+    try {
+      const userRef = window.Firestore.doc(window.Firestore.db, "users", window.Auth.currentUser.uid);
+      await window.Firestore.updateDoc(userRef, { status: status });
+      
+      // Update local stat-bio display if it exists (Focus Zone)
+      const bioEl = document.getElementById('stat-bio');
+      if (bioEl) bioEl.textContent = status || "Ceci est une bio de test.";
+      
+      alert("Statut mis à jour !");
+    } catch (e) {
+      console.error("Status update error:", e);
+      alert("Erreur lors de la mise à jour du statut.");
+    }
+  },
+
+  async loadMyStatus() {
+    if (!window.Auth?.currentUser) return;
+    try {
+      const userRef = window.Firestore.doc(window.Firestore.db, "users", window.Auth.currentUser.uid);
+      const snap = await window.Firestore.getDoc(userRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        const input = document.getElementById('user-status-input');
+        if (input && data.status) input.value = data.status;
+        
+        const bioEl = document.getElementById('stat-bio');
+        if (bioEl) bioEl.textContent = data.status || "Ceci est une bio de test.";
+      }
+    } catch (e) {
+      console.error("Status load error:", e);
     }
   },
 

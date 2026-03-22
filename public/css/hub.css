@@ -702,7 +702,7 @@
   display: flex;
   align-items: center;
   z-index: 200;
-  box-shadow: 
+  box-shadow:
     0 10px 25px rgba(0,0,0,0.15),
     inset 0 2px 4px rgba(255,255,255,0.8),
     inset 0 -3px 8px rgba(0,0,0,0.08);

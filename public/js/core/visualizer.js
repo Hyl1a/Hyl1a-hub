@@ -111,6 +111,9 @@ const ModernVisualizer = {
     const height = this.canvas.height;
     this.ctx.clearRect(0, 0, width, height);
 
+    // Update Time Display
+    this.updateTimeUI();
+
     // Get frequency data if audio is playing
     let dataArray = null;
     let bufferLength = 0;
@@ -203,6 +206,34 @@ const ModernVisualizer = {
         const xLeft = (width / 2) - ((i + 1) * barSpacing);
         this.drawRoundedVRect(xLeft, centerY - barHeight, barWidth, barHeight, barWidth / 2);
     }
+  },
+
+  updateTimeUI: function() {
+    if (typeof AudioManager === 'undefined' || !AudioManager.currentMusicAudio) return;
+    
+    const audio = AudioManager.currentMusicAudio;
+    const curEl = document.getElementById('vis-time-current');
+    const totEl = document.getElementById('vis-time-total');
+    
+    if (curEl && totEl) {
+        curEl.textContent = this.formatTime(audio.currentTime);
+        totEl.textContent = isNaN(audio.duration) ? "--:--" : this.formatTime(audio.duration);
+    }
+
+    // Also ensure title is correct
+    const trackTitle = document.getElementById('vis-track-title');
+    if (trackTitle && AudioManager.isPlayingMusic && AudioManager.playlist[AudioManager.currentTrackIndex]) {
+        const expected = AudioManager.playlist[AudioManager.currentTrackIndex].name;
+        if (trackTitle.textContent !== expected) {
+            trackTitle.textContent = expected;
+        }
+    }
+  },
+
+  formatTime: function(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
   },
 
   // Helper method to draw a rounded filled rectangle vertically aligned to the bottom
