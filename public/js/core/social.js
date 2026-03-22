@@ -495,9 +495,7 @@ window.SocialSystem = {
       
       const genEl = document.getElementById('stat-gender');
       if (genEl) {
-        let gender = friend.gender || "Utilisateur";
-        if (friend.b64) gender = this.detectMiiGender(friend.b64);
-        genEl.textContent = gender;
+        genEl.textContent = friend.gender || "Homme";
       }
       
       const ptEl = document.getElementById('stat-playtime');
@@ -515,7 +513,8 @@ window.SocialSystem = {
       const miiHeaderEl = document.getElementById('social-mii-header');
       if (miiHeaderEl) {
           const isSelf = friend.username === window.Auth.currentUsername;
-          miiHeaderEl.textContent = isSelf ? `MON MII avec ${friend.first_name || friend.username}` : `MII de ${friend.first_name || friend.username}`;
+          const pseudo = friend.first_name || friend.username;
+          miiHeaderEl.textContent = isSelf ? `MON MII ${pseudo}` : `MII de ${pseudo}`;
       }
       
       // Try to fetch Mii if not present
@@ -560,11 +559,11 @@ window.SocialSystem = {
           this.setFocusMii({
             username: username,
             tag: tag,
-            bio: "Bienvenue sur mon profil Hylia Plaza ! Je personnalise mon univers.",
-            gender: "Utilisateur",
+            bio: "",
+            gender: myAvatar.gender || "Homme",
             playtime: "12h",
             creation: myAvatar.createdAt ? new Date(myAvatar.createdAt).getFullYear().toString() : "2024",
-            favapp: "Hyl1a Bio",
+            favapp: "Pokémon Émeraude (GBA)",
             b64: b64
           });
           return;
@@ -585,17 +584,7 @@ window.SocialSystem = {
     });
   },
 
-  detectMiiGender(b64) {
-    try {
-      const binaryString = atob(b64);
-      const firstByte = binaryString.charCodeAt(0);
-      // Bit 0 of byte 0: 0 = Male, 1 = Female
-      return (firstByte & 1) === 1 ? "Femme" : "Homme";
-    } catch(e) { 
-      console.error("Mii Gender Detect Error:", e);
-      return "Utilisateur"; 
-    }
-  },
+  // detectMiiGender removed as per user feedback
 
   // --- NEW CHAT FUNCTIONS ---
 
