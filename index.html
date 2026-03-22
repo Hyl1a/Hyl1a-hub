@@ -120,16 +120,18 @@
   </div>
 
   <!-- TOP NAVIGATION & CLOCK -->
-  <div id="user-panel" onclick="if(window.SocialSystem) SocialSystem.openOverlay('profile')" style="cursor: pointer; transition: transform 0.2s, filter 0.2s;">
-    <div id="user-avatar-wrap">
+  <div id="user-panel">
+    <div id="user-avatar-wrap" onclick="if(window.SocialSystem) SocialSystem.openOverlay('profile')" style="cursor: pointer;">
       <div id="top-avatar-container"></div>
       <div class="online-dot avatar-dot"></div>
     </div>
-    <div id="user-info-text">
+    <div id="user-info-text" onclick="if(window.SocialSystem) SocialSystem.openOverlay('profile')" style="cursor: pointer;">
       <div id="top-username" class="top-name">Guest</div>
       <div class="top-subname">username <div class="online-dot text-dot"></div></div>
     </div>
-    <div class="settings-gear" style="margin-left:15px; font-size: 20px; opacity:0.8; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));">⚙️</div>
+    <div id="top-logout-container" style="margin-left: 15px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 15px; display: flex; align-items: center;">
+      <button id="btn-home-logout" onclick="if(window.Auth) Auth.logout()" title="Déconnexion" style="background: rgba(255, 107, 107, 0.15); border: 1px solid rgba(255, 107, 107, 0.3); color: #ff8e8e; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 16px;">⏻</button>
+    </div>
   </div>
   <div id="clock-panel">
     <div id="top-time">12:00 <span class="am-pm">PM</span></div>

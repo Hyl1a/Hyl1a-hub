@@ -14,7 +14,8 @@ import {
   setDoc, 
   getDoc,
   collection,
-  getDocs
+  getDocs,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 
@@ -45,6 +46,9 @@ window.Auth = {
             } else {
               this.currentUserTag = data.tag;
             }
+
+            // Start Heartbeat for Online Presence
+            this.startHeartbeat();
 
             localStorage.setItem('nostalgia_current_user', this.currentUsername);
             localStorage.setItem('nostalgia_current_user_tag', this.currentUserTag);
@@ -127,10 +131,29 @@ window.Auth = {
         this.currentUser = null;
         this.currentUsername = null;
         this.currentUserTag = null;
+        if(this.heartbeatTimer) clearInterval(this.heartbeatTimer);
         localStorage.removeItem('nostalgia_current_user');
         localStorage.removeItem('nostalgia_current_user_tag');
       }
     });
+  },
+
+  async startHeartbeat() {
+    if (this.heartbeatTimer) clearInterval(this.heartbeatTimer);
+    
+    const updatePresence = async () => {
+      if (!this.currentUser) return;
+      try {
+        const userRef = doc(window.FirebaseDB, "users", this.currentUser.uid);
+        await updateDoc(userRef, { lastActive: new Date().toISOString() });
+      } catch (e) { console.error("Heartbeat error:", e); }
+    };
+
+    // Initial update
+    updatePresence();
+    
+    // Every 2 minutes
+    this.heartbeatTimer = setInterval(updatePresence, 120000);
   },
 
   getCurrentUser() {

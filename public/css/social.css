@@ -184,6 +184,26 @@
   font-weight: 800;
 }
 
+.friend-status-dot {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.friend-status-dot.online {
+  background: #34c759;
+  box-shadow: 0 0 10px rgba(52, 199, 89, 0.5);
+}
+
+.friend-status-dot.offline {
+  background: #a4b3c6;
+  opacity: 0.5;
+}
+
 #social-focus-mii-container {
   flex: 1;
   width: 100%;

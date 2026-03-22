@@ -220,6 +220,7 @@ window.SocialSystem = {
   },
 
   renderListItems(data, container, emptyMsg = "Aucune information trouvée.", showAddButton = false) {
+    container.innerHTML = '';
     if (data.length === 0) {
       container.innerHTML = '<div style="text-align:center; padding: 20px; opacity:0.6;">'+emptyMsg+'</div>';
       return;
@@ -235,7 +236,11 @@ window.SocialSystem = {
         addButtonHtml = `<button onclick="event.stopPropagation(); SocialSystem.addFriendRequest('${item.username}#${item.tag}')" style="margin-top: 8px; width: 100%; padding: 4px; background: rgba(0,0,0,0.1); border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: #333;">+ Ajouter</button>`;
       }
 
+      const isOnline = item.lastActive ? (Date.now() - new Date(item.lastActive).getTime() < 300000) : false; // 5 mins
+      const statusClass = isOnline ? 'online' : 'offline';
+
       card.innerHTML = `
+        <div class="friend-status-dot ${statusClass}"></div>
         <div class="friend-name">${item.username}<span class="friend-tag">#${item.tag}</span></div>
         <div class="friend-bio-small">${item.bio}</div>
         <div class="friend-gender">${item.gender}</div>
@@ -366,30 +371,42 @@ window.SocialSystem = {
     imgObj.style.opacity = '0'; 
     imgObj.style.transform = 'scale(0.95)';
     
-    setTimeout(() => {
+    setTimeout(async () => {
       const nameEl = document.getElementById('stat-display-name');
       if (nameEl) nameEl.innerHTML = `${friend.username}<span style="opacity:0.6; font-size:0.7em;">#${friend.tag}</span>`;
       
       const bioEl = document.getElementById('stat-bio');
-      if (bioEl) bioEl.textContent = friend.bio;
+      if (bioEl) bioEl.textContent = friend.bio || "Explorateur Hylia Plaza";
       
       const genEl = document.getElementById('stat-gender');
-      if (genEl) genEl.textContent = friend.gender;
+      if (genEl) genEl.textContent = friend.gender || "Joueur";
       
       const ptEl = document.getElementById('stat-playtime');
-      if (ptEl) ptEl.textContent = friend.playtime;
+      if (ptEl) ptEl.textContent = friend.playtime || "??";
       
       const crEl = document.getElementById('stat-creation');
-      if (crEl) crEl.textContent = friend.creation;
+      if (crEl) crEl.textContent = friend.creation || "2024";
       
       const favEl = document.getElementById('stat-favapp');
-      if (favEl) favEl.textContent = friend.favapp;
+      if (favEl) favEl.textContent = friend.favapp || "Hylia Plaza";
       
+      // Try to fetch Mii if not present
+      let displayB64 = friend.b64;
+      if (!displayB64 && friend.uid) {
+         try {
+           const avatarRef = window.Firestore.doc(window.Firestore.db, "avatars", friend.uid);
+           const avatarSnap = await window.Firestore.getDoc(avatarRef);
+           if (avatarSnap.exists()) {
+              displayB64 = avatarSnap.data().visual_base64;
+           }
+         } catch(e) { console.error("SocialSystem: Error fetching friend mii", e); }
+      }
+
       // Render as full body for the focus zone
-      if (friend.b64) {
-         imgObj.src = `https://mii-unsecure.ariankordi.net/miis/image.png?data=${encodeURIComponent(friend.b64)}&verifyCharInfo=0&type=all_body&width=512&shaderType=wiiu`;
+      if (displayB64) {
+         imgObj.src = `https://mii-unsecure.ariankordi.net/miis/image.png?data=${encodeURIComponent(displayB64)}&verifyCharInfo=0&type=all_body&width=512&shaderType=wiiu`;
       } else {
-         imgObj.src = friend.mii || 'public/assets/icons/logov2.webp';
+         imgObj.src = 'public/assets/icons/mii.webp'; // Default Mii instead of logo
       }
       
       imgObj.onload = () => {
