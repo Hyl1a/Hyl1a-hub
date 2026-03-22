@@ -1,4 +1,7 @@
 {
+  "outputDirectory": ".",
+  "buildCommand": "",
+  "installCommand": "echo skip",
   "cleanUrls": true,
   "headers": [
     {
