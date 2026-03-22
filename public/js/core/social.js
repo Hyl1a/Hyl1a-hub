@@ -11,6 +11,8 @@ window.SocialSystem = {
   globalUsers: [],
   unsubFriends: null,
   unsubRequests: null,
+  unsubGlobal: null,
+  unsubPrivate: null,
 
   init() {
     this.overlay = document.getElementById('social-overlay');
@@ -19,6 +21,9 @@ window.SocialSystem = {
   openOverlay(tab) {
     if(!this.overlay) this.init();
     this.overlay.classList.remove('hidden');
+    
+    // Stop home scroll check
+    document.body.classList.add('social-active');
 
     const header = document.getElementById('social-header');
     const leftCol = document.getElementById('social-left-col');
@@ -30,6 +35,20 @@ window.SocialSystem = {
 
     // Reset UI
     this.setFocusMii(null);
+    document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
+    
+    if (this.unsubGlobal) { this.unsubGlobal(); this.unsubGlobal = null; }
+    if (this.unsubPrivate) { this.unsubPrivate(); this.unsubPrivate = null; }
+
+    this.switchTab(tab);
+  },
+
+  switchTab(tab) {
+    const header = document.getElementById('social-header');
+    const leftCol = document.getElementById('social-left-col');
+    const listInner = document.getElementById('social-list');
+    
+    // Reset sidebars
     document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
 
     if (tab === 'profile') {
@@ -64,7 +83,6 @@ window.SocialSystem = {
         </div>
         
         <button onclick="window.Auth.logout()" style="margin-top: 20px; padding: 12px; width: 100%; background: #ff6b6b; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(255,107,107,0.3);">Déconnexion</button>
-      </div>
       `;
       
       // Fetch Real Mii
@@ -79,24 +97,27 @@ window.SocialSystem = {
 
     } else if (tab === 'global') {
       document.getElementById('btn-global').classList.add('active');
-      header.textContent = "Découvrir la Plaza";
+      header.textContent = "Chat Global";
       leftCol.style.opacity = '1';
-      this.fetchGlobalUsers();
+      this.renderGlobalChat(listInner);
 
     } else if (tab === 'messages') {
       document.getElementById('btn-messages').classList.add('active');
-      header.textContent = "Messages";
+      header.textContent = "Messages Privés";
       leftCol.style.opacity = '1';
-      document.getElementById('social-list').innerHTML = '<div style="text-align:center; padding: 40px; opacity:0.6;">Service de messagerie indisponible pour le moment.</div>';
+      this.renderPrivateMessagesList(listInner);
     }
   },
 
   closeOverlay() {
     if(this.overlay) this.overlay.classList.add('hidden');
+    document.body.classList.remove('social-active');
     document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
     
     if(this.unsubFriends) this.unsubFriends();
     if(this.unsubRequests) this.unsubRequests();
+    if(this.unsubGlobal) this.unsubGlobal();
+    if(this.unsubPrivate) this.unsubPrivate();
     
     if (window.AudioManager && AudioManager.playBack) {
       AudioManager.playBack();
@@ -263,7 +284,10 @@ window.SocialSystem = {
         <div class="friend-name">${displayName}<span class="friend-tag">#${item.tag}</span></div>
         <div class="friend-bio-small">${item.bio || ""}</div>
         <div class="friend-gender">${item.gender || ""}</div>
-        ${addButtonHtml}
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button onclick="event.stopPropagation(); SocialSystem.openOverlay('messages'); setTimeout(() => SocialSystem.openPrivateChat('${item.uid}', '${item.first_name || item.username}'), 100);" style="flex:1; padding: 6px; background: rgba(58, 123, 213, 0.15); border: 1px solid rgba(58, 123, 213, 0.3); border-radius: 8px; font-weight: bold; cursor: pointer; color: #3a7bd5;">Message</button>
+          ${addButtonHtml ? `<div style="flex:1">${addButtonHtml}</div>` : ''}
+        </div>
       `;
 
       card.addEventListener('mouseenter', () => {
@@ -475,6 +499,185 @@ window.SocialSystem = {
       favapp: "--",
       mii: 'public/assets/icons/logov2.webp'
     });
+  },
+
+  // --- NEW CHAT FUNCTIONS ---
+
+  renderGlobalChat(container) {
+    container.innerHTML = `
+      <div class="chat-container">
+        <div id="global-chat-messages" class="chat-messages">
+          <div style="text-align:center; padding:20px; opacity:0.5;">Chargement du chat...</div>
+        </div>
+        <div class="chat-input-bar">
+          <input type="text" id="global-chat-input" class="chat-input" placeholder="Écrire un message..." maxlength="200">
+          <button id="global-chat-send" class="chat-send-btn">➔</button>
+        </div>
+      </div>
+    `;
+
+    const input = document.getElementById('global-chat-input');
+    const sendBtn = document.getElementById('global-chat-send');
+    const messagesDiv = document.getElementById('global-chat-messages');
+
+    const handleSend = () => {
+      const text = input.value.trim();
+      if (text) {
+        this.sendGlobalMessage(text);
+        input.value = '';
+      }
+    };
+
+    sendBtn.onclick = handleSend;
+    input.onkeydown = (e) => { if(e.key === 'Enter') handleSend(); };
+
+    // Real-time listener
+    const q = window.Firestore.query(
+      window.Firestore.collection(window.Firestore.db, "global_messages"),
+      window.Firestore.orderBy("timestamp", "desc"),
+      window.Firestore.limit(50)
+    );
+
+    this.unsubGlobal = window.Firestore.onSnapshot(q, (snapshot) => {
+      messagesDiv.innerHTML = '';
+      const docs = [...snapshot.docs].reverse();
+      docs.forEach(doc => {
+        const data = doc.data();
+        const isSelf = data.uid === (window.Auth?.currentUser?.uid);
+        const time = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...';
+        
+        const msg = document.createElement('div');
+        msg.className = `message-bubble ${isSelf ? 'self' : 'other'}`;
+        msg.innerHTML = `
+          <div class="message-info">${isSelf ? 'Moi' : (data.first_name || data.username || 'Anonyme')} • ${time}</div>
+          <div class="message-text">${this.escapeHtml(data.text)}</div>
+        `;
+        messagesDiv.appendChild(msg);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+  },
+
+  async sendGlobalMessage(text) {
+    const user = window.Auth?.currentUser;
+    if (!user) return;
+
+    try {
+      await window.Firestore.addDoc(window.Firestore.collection(window.Firestore.db, "global_messages"), {
+        uid: user.uid,
+        username: window.Auth.currentUsername || "Anonyme",
+        first_name: localStorage.getItem('nostalgia_first_name') || "", 
+        text: text,
+        timestamp: window.Firestore.serverTimestamp()
+      });
+    } catch(e) { console.error("Chat Global Error:", e); }
+  },
+
+  renderPrivateMessagesList(container) {
+    container.innerHTML = `
+      <div style="padding: 20px;">
+        <div style="font-weight: bold; margin-bottom: 15px; opacity: 0.7;">Tes Amis</div>
+        <div id="chat-friends-list"></div>
+      </div>
+    `;
+
+    const friendsList = document.getElementById('chat-friends-list');
+    if (this.friends.length === 0) {
+      friendsList.innerHTML = '<div style="opacity:0.5;">Ajoute des amis pour discuter en privé.</div>';
+    } else {
+      this.friends.forEach(f => {
+        const item = document.createElement('div');
+        item.className = 'friend-card';
+        item.style.marginBottom = '10px';
+        item.innerHTML = `
+          <div class="friend-name">${f.first_name || f.username}</div>
+          <div style="font-size: 12px; opacity: 0.6;">Démarrer une discussion</div>
+        `;
+        item.onclick = () => this.openPrivateChat(f.uid, f.first_name || f.username);
+        friendsList.appendChild(item);
+      });
+    }
+  },
+
+  async openPrivateChat(friendUid, friendName) {
+    const user = window.Auth?.currentUser;
+    if (!user) return;
+
+    const header = document.getElementById('social-header');
+    const container = document.getElementById('social-list');
+    header.textContent = `Discussion : ${friendName}`;
+
+    const chatId = [user.uid, friendUid].sort().join('_');
+    
+    container.innerHTML = `
+      <div class="chat-container">
+        <div id="private-chat-messages" class="chat-messages"></div>
+        <div class="chat-input-bar">
+          <button onclick="SocialSystem.switchTab('messages')" style="background:none; border:none; font-size:20px; cursor:pointer; opacity:0.6;">←</button>
+          <input type="text" id="private-chat-input" class="chat-input" placeholder="Message privé..." maxlength="300">
+          <button id="private-chat-send" class="chat-send-btn">➔</button>
+        </div>
+      </div>
+    `;
+
+    const input = document.getElementById('private-chat-input');
+    const sendBtn = document.getElementById('private-chat-send');
+    const messagesDiv = document.getElementById('private-chat-messages');
+
+    const handleSend = () => {
+      const text = input.value.trim();
+      if (text) {
+        this.sendPrivateMessage(chatId, text);
+        input.value = '';
+      }
+    };
+
+    sendBtn.onclick = handleSend;
+    input.onkeydown = (e) => { if(e.key === 'Enter') handleSend(); };
+
+    const q = window.Firestore.query(
+      window.Firestore.collection(window.Firestore.db, "private_chats", chatId, "messages"),
+      window.Firestore.orderBy("timestamp", "asc")
+    );
+
+    this.unsubPrivate = window.Firestore.onSnapshot(q, (snapshot) => {
+      messagesDiv.innerHTML = '';
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const isSelf = data.senderId === user.uid;
+        const msg = document.createElement('div');
+        msg.className = `message-bubble ${isSelf ? 'self' : 'other'}`;
+        msg.innerHTML = `<div class="message-text">${this.escapeHtml(data.text)}</div>`;
+        messagesDiv.appendChild(msg);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+  },
+
+  async sendPrivateMessage(chatId, text) {
+    const user = window.Auth?.currentUser;
+    if (!user) return;
+
+    try {
+      const chatRef = window.Firestore.doc(window.Firestore.db, "private_chats", chatId);
+      await window.Firestore.setDoc(chatRef, {
+        participants: chatId.split('_'),
+        lastMessage: text,
+        lastTimestamp: window.Firestore.serverTimestamp()
+      }, { merge: true });
+
+      await window.Firestore.addDoc(window.Firestore.collection(window.Firestore.db, "private_chats", chatId, "messages"), {
+        senderId: user.uid,
+        text: text,
+        timestamp: window.Firestore.serverTimestamp()
+      });
+    } catch(e) { console.error("Private Chat Error:", e); }
+  },
+
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 };
 
