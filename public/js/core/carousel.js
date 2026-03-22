@@ -184,11 +184,11 @@ const CarouselManager = {
       const x = newOffset * this.tileSpacing;
       const isActive = (i === this.currentIndex);
 
-      // Scale: active = 1.15, neighbors = 0.95, far = 0.88
+      // Scale: active = 1.4, neighbors = 0.95, far = 0.88
       const absOffset = Math.abs(newOffset);
       let scale;
       if (isActive) {
-        scale = 1.15;
+        scale = 1.4;
       } else if (absOffset <= 1) {
         scale = 0.95;
       } else if (absOffset <= 2) {
