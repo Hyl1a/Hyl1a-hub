@@ -135,11 +135,26 @@ window.SocialSystem = {
 
       // 2. Listen for actual friends
       const friendsRef = window.Firestore.collection(window.Firestore.db, "users", fbUser.uid, "friends");
-      this.unsubFriends = window.Firestore.onSnapshot(friendsRef, (snapshot) => {
-        this.friends = [];
-        snapshot.forEach(doc => {
-          this.friends.push({ id: doc.id, ...doc.data() });
-        });
+      this.unsubFriends = window.Firestore.onSnapshot(friendsRef, async (snapshot) => {
+        const friendsList = [];
+        for (const friendDoc of snapshot.docs) {
+          const friendUid = friendDoc.id;
+          // Fetch full profile to get bio, gender, lastActive, etc.
+          try {
+            const userRef = window.Firestore.doc(window.Firestore.db, "users", friendUid);
+            const userSnap = await window.Firestore.getDoc(userRef);
+            if (userSnap.exists()) {
+              friendsList.push({ uid: friendUid, ...userSnap.data() });
+            } else {
+              // Fallback to minimal data if profile fetch fails
+              friendsList.push({ uid: friendUid, ...friendDoc.data() });
+            }
+          } catch(e) { 
+            console.error("Social: Error fetching friend profile", e);
+            friendsList.push({ uid: friendUid, ...friendDoc.data() });
+          }
+        }
+        this.friends = friendsList;
         this.renderListItems(this.friends, listInner, "Tu n'as pas encore d'amis.");
       });
 

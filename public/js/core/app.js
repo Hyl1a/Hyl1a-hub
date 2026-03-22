@@ -444,34 +444,10 @@ function initAuth() {
     generateAuthBackground();
   }
 
-  // Make loadUserMii globally accessible so auth.js can trigger it when Firebase Auth state changes
-  window.loadUserMii = async function () {
-    const fbUser = window.Auth ? window.Auth.currentUser : null;
-    const container = document.getElementById('top-avatar-container');
-    if (!fbUser || !container) return;
-
-    try {
-      if (!window.Firestore || !window.Firestore.getDoc) return;
-      const docRef = window.Firestore.doc(window.FirebaseDB, "avatars", fbUser.uid);
-      const docSnap = await window.Firestore.getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const myAvatar = docSnap.data();
-        if (myAvatar && myAvatar.visual_base64) {
-          const b64 = myAvatar.visual_base64;
-          const thumbUrl = `https://mii-unsecure.ariankordi.net/miis/image.png?data=${encodeURIComponent(b64)}&verifyCharInfo=0&type=face&width=128&shaderType=wiiu`;
-          container.innerHTML = `<img src="${thumbUrl}" style="width: 120%; height: 120%; object-fit: cover; transform: translateY(10%);">`;
-        } else {
-          container.innerHTML = `<span style="font-size: 24px;">👤</span>`;
-        }
-      } else {
-        container.innerHTML = `<span style="font-size: 24px;">👤</span>`;
-      }
-    } catch (e) {
-      console.error("Error loading user Mii for top bar:", e);
-      container.innerHTML = `<span style="font-size: 24px;">👤</span>`;
-    }
-  }; // End of window.loadUserMii
+  // Re-load current user Mii when called manually
+  window.loadUserMii = () => {
+    if (window.Auth) window.Auth.loadUserMii();
+  };
 
   window.checkForcedMiiCreation = async function () {
     // Anti-duplication guard: don't trigger if a fullscreen app is already open
