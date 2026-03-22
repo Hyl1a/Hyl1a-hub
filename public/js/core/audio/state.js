@@ -32,6 +32,8 @@ export const AudioState = {
     { name: 'Eshop July 2014', file: 'public/assets/audio/Eshop July 2014.m4a', cover: 'public/assets/icons/eshop.webp' },
     { name: 'Eshop June 2015', file: 'public/assets/audio/Eshop June 2015.m4a', cover: 'public/assets/icons/eshop.webp' },
     { name: 'BXNJI', file: 'public/assets/audio/bxnji.mp3', cover: 'public/assets/icons/nico.webp' },
-    { name: 'Thoughtbody', file: 'public/assets/audio/thoughtbody.mp3', cover: 'public/assets/icons/nico.webp' }
+    { name: 'Thoughtbody', file: 'public/assets/audio/thoughtbody.mp3', cover: 'public/assets/icons/nico.webp' },
+    { name: 'OST 1', file: 'public/assets/icons/ost1.mp3', cover: 'public/assets/icons/miiplaza.webp' },
+    { name: 'OST 2', file: 'public/assets/icons/ost2.mp3', cover: 'public/assets/icons/miiplaza.webp' }
   ]
 };

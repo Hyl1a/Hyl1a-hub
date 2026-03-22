@@ -118,7 +118,7 @@
   justify-content: center;
   background: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%);
   border-radius: 30px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .social-header {

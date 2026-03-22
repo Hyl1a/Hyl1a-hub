@@ -358,7 +358,8 @@ window.handleAppLaunch = function (trigger) {
     window.showSplashScreen(() => {
       if (appId === 'miiMaker' || appId === 'gba' || appId === 'gbaTurbo' || appId === 'miiManager') {
         const bgVid = document.getElementById('bg-video');
-        if (bgVid && !bgVid.paused) bgVid.pause();
+        // Let Mii Maker handle its own video transition to avoid race conditions with pause/play
+        if (bgVid && appId !== 'miiMaker' && !bgVid.paused) bgVid.pause();
         
         const fsContainer = document.createElement('div');
         fsContainer.className = 'mii-fullscreen-container';
@@ -382,6 +383,10 @@ window.handleAppLaunch = function (trigger) {
 
           if (typeof AudioManager !== 'undefined') {
             AudioManager.restoreHubAudio();
+          }
+          
+          if (appId === 'miiMaker' && typeof window.stopMiiMusic === 'function') {
+            window.stopMiiMusic();
           }
 
           setTimeout(() => {

@@ -78,6 +78,11 @@
   overflow: hidden;
 }
 
+body.app-open-active #user-panel,
+body.app-open-active #huge-profile-btn {
+  display: none !important;
+}
+
 
 
 #user-avatar-wrap {

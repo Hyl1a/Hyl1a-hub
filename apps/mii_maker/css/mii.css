@@ -123,7 +123,7 @@
 .mii-canvas-area {
   flex: 1.5;
   position: relative;
-  background: radial-gradient(ellipse at 50% 60%, rgba(180, 255, 220, 0.1) 0%, transparent 100%);
+  background: transparent !important;
   min-width: 55%;
   overflow: hidden; /* Prevent 105% wide Mii image from overlapping controls */
 }

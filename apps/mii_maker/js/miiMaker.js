@@ -1,6 +1,4 @@
-// --- Mii Maker Music (crossfade with main music) ---
-let miiMusic = null;
-let mainMusicWasPlaying = false;
+let originalVideoSrc = null;
 
 function startMiiMusic() {
   if (miiMusic) return; // Already playing
@@ -27,13 +25,32 @@ function startMiiMusic() {
   // Set Mii Maker background video
   const bgVideo = document.getElementById('bg-video');
   if (bgVideo) {
+    // Save current src if not already saved (to avoid overwriting with the mii maker one if called twice)
+    if (!originalVideoSrc || !bgVideo.src.includes('miimakerBC.mp4')) {
+      originalVideoSrc = bgVideo.src;
+    }
     bgVideo.src = 'public/assets/icons/video/miimakerBC.mp4';
+    bgVideo.muted = true;
+    bgVideo.autoplay = true;
+    bgVideo.setAttribute('playsinline', '');
+    bgVideo.load();
     bgVideo.style.opacity = '1';
-    bgVideo.play().catch(e => console.log('Video play error:', e));
+    bgVideo.play().then(() => {
+        console.log("Mii Maker video background started successfully.");
+    }).catch(e => {
+        console.warn('Video play deferred or failed, trying interaction trigger:', e);
+        // Fallback: try play on next click
+        const oncePlay = () => {
+            bgVideo.play();
+            document.removeEventListener('click', oncePlay);
+        };
+        document.addEventListener('click', oncePlay);
+    });
   }
 }
 
 function stopMiiMusic() {
+  console.log("Stopping Mii Maker background music and video...");
   if (typeof AudioManager !== 'undefined') {
     AudioManager.isExternalMusicPlaying = false;
   }
@@ -42,11 +59,22 @@ function stopMiiMusic() {
     miiMusic.currentTime = 0;
     miiMusic = null;
   }
+
+  // Restore background video
+  const bgVideo = document.getElementById('bg-video');
+  if (bgVideo && originalVideoSrc) {
+    bgVideo.src = originalVideoSrc;
+    bgVideo.play().catch(() => {});
+  }
+
   // Restore main music if it was playing before
   if (mainMusicWasPlaying && typeof AudioManager !== 'undefined' && AudioManager.currentMusicAudio) {
     AudioManager.fadeIn(800);
   }
 }
+
+// Ensure cleanup is accessible
+window.stopMiiMusic = stopMiiMusic;
 
 function playMiiSFX(name) {
   const sfx = new Audio(`/assets/audio/${name}.m4a`);
@@ -163,7 +191,7 @@ let isQuestActive = false;
  */
 function renderGenderSelection(container) {
   container.innerHTML = `
-    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(180, 255, 220, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%); backdrop-filter: blur(20px); color: #005a22; border-radius: 20px; overflow: hidden; position: relative; font-family: 'Outfit', sans-serif;">
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; backdrop-filter: blur(20px); color: #005a22; border-radius: 20px; overflow: hidden; position: relative; font-family: 'Outfit', sans-serif;">
       <h2 style="font-size: 32px; margin-bottom: 40px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); animation: fadeInDown 0.8s ease-out;">Choisissez le genre</h2>
       <div style="display: flex; gap: 40px; animation: fadeInUp 0.8s ease-out;">
         <button id="select-male" style="background: #b3dbff; border: 4px solid #7ec4ff; border-radius: 30px; padding: 30px; cursor: pointer; transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); display: flex; flex-direction: column; align-items: center; gap: 15px;">

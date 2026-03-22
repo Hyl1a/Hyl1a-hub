@@ -284,19 +284,31 @@ window.SocialSystem = {
       const usersRef = window.Firestore.collection(window.FirebaseDB, "users");
       const qSnap = await window.Firestore.getDocs(usersRef);
       
+      const avatarsRef = window.Firestore.collection(window.FirebaseDB, "avatars");
+      const avSnap = await window.Firestore.getDocs(avatarsRef);
+      const avatarsMap = {};
+      avSnap.forEach(doc => {
+        avatarsMap[doc.id] = doc.data();
+      });
+
       this.globalUsers = [];
       qSnap.forEach(doc => {
           const u = doc.data();
-          if (u.username !== Auth.currentUsername) {
+          const av = avatarsMap[doc.id];
+          
+          // A "real" account for the user seems to be one that has a Mii created
+          if (av && u.username !== (window.Auth ? window.Auth.currentUsername : "")) {
             this.globalUsers.push({
               username: u.username,
-              tag: u.tag || "0000",
-              bio: u.bio || "Explorateur Hylia Plaza",
-              gender: u.gender || "Joueur",
+              tag: u.tag || av.tag || "0000",
+              first_name: av.first_name || u.username,
+              b64: av.visual_base64 || "",
+              bio: u.bio || av.status || "Explorateur Hylia Plaza",
+              gender: av.gender || u.gender || "Joueur",
               mii: 'public/assets/icons/logov2.webp',
               playtime: u.playtime || "??",
               creation: u.createdAt ? new Date(u.createdAt).getFullYear().toString() : "2024",
-              favapp: u.favoriteApp || "Hyl1a App",
+              favapp: u.favoriteApp || "Pokémon Émeraude",
               uid: doc.id
             });
           }
@@ -507,14 +519,16 @@ window.SocialSystem = {
       const favEl = document.getElementById('stat-favapp');
       if (favEl) {
           // GBA restriction for now
-          favEl.textContent = friend.favapp || "Pokémon Émeraude (GBA)";
+          let fav = friend.favapp || "Pokémon Émeraude";
+          if (!fav.toLowerCase().includes("(gba)")) fav += " (GBA)";
+          favEl.textContent = fav;
       }
 
       const miiHeaderEl = document.getElementById('social-mii-header');
       if (miiHeaderEl) {
-          const isSelf = friend.username === window.Auth.currentUsername;
-          const pseudo = friend.first_name || friend.username;
-          miiHeaderEl.textContent = isSelf ? `MON MII ${pseudo}` : `MII de ${pseudo}`;
+          const isSelf = friend.username === (window.Auth ? window.Auth.currentUsername : "");
+          const pseudo = friend.first_name || friend.username || "Mii";
+          miiHeaderEl.textContent = isSelf ? `MON MII avec ${pseudo}` : `MII de ${pseudo}`;
       }
       
       // Try to fetch Mii if not present
