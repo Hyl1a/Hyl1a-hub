@@ -8,7 +8,7 @@ const CarouselManager = {
   navCooldown: 200,
   currentIndex: 0,
   previousIndex: 0,
-  tileSpacing: 190, // px between tile centers
+  tileSpacing: 260, // px between tile centers (increased for 1.4 scale)
 
   init: function() {
     this.tiles = Array.from(document.querySelectorAll('.grid-tile:not(.webm-tile)'));
@@ -197,8 +197,9 @@ const CarouselManager = {
         scale = Math.max(0.7, 0.88 - (absOffset - 2) * 0.05);
       }
 
-      // Opacity
-      const opacity = isActive ? 1 : Math.max(0.15, 1 - absOffset * 0.2);
+      // Opacity: center is 1.0, neighbors fade out. 
+      // User requested 8 apps visible (not counting center), so index 4 should be visible.
+      const opacity = isActive ? 1 : Math.max(0.12, 1 - absOffset * 0.18);
 
       // Apply transform
       tile.style.transform = `translate3d(${x}px, 0, 0) scale(${scale})`;
