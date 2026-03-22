@@ -233,18 +233,19 @@ function initEnvironment() {
 
 function initAppTriggers() {
   window.AppRegistry = {
-    'gallery': { title: '🖼️ Image Gallery', render: async (c) => (await import('../apps/gallery.js')).default(c) },
+    'gallery': { title: 'Memory Gallery', render: (c) => c.innerHTML = '<div style="display:flex; height:100%; align-items:center; justify-content:center; color:#555; font-size:20px; font-weight:bold; text-align:center; padding:20px;">Cette application est en cours de création, à suivre...</div>' },
     'music': { title: '📻 Radio Station', render: async (c) => (await import('../apps/music.js')).default(c) },
     'arcade': { title: '👾 Hall of Fame Arcade', render: async (c) => (await import('../apps/hallOfFame.js')).default(c) },
     'guestbook': { title: '📝 Digital Town Board', render: async (c) => (await import('../apps/guestbook.js')).default(c) },
     'notes': { title: '📓 Personal Notes', render: async (c) => (await import('../apps/notes.js')).default(c) },
     'hallOfFame': { title: '👾 Hall of Fame Arcade', render: async (c) => (await import('../apps/hallOfFame.js')).default(c) },
     'miiMaker': { title: '👤 Mii Maker', render: async (c) => (await import('../../../apps/mii_maker/js/miiMaker.js')).default(c) },
-    'miiPlaza': { title: '🏕️ Mii Plaza', render: async (c) => (await import('../../../apps/mii_maker/js/miiPlaza.js')).default(c) },
+    'miiPlaza': { title: 'Mii Plaza', render: (c) => c.innerHTML = '<div style="display:flex; height:100%; align-items:center; justify-content:center; color:#555; font-size:20px; font-weight:bold; text-align:center; padding:20px;">Cette application est en cours de création, à suivre...</div>' },
+    'browser': { title: 'Internet Browser', render: (c) => c.innerHTML = '<div style="display:flex; height:100%; align-items:center; justify-content:center; color:#555; font-size:20px; font-weight:bold; text-align:center; padding:20px;">Cette application est en cours de création, à suivre...</div>' },
     'gba': { title: '🎮 Émulateur GBA', render: async (c) => (await import('../../../apps/gba/js/gba.js')).default(c) },
     'gbaTurbo': { title: '🚀 GBA Turbo', render: async (c) => (await import('../apps/gbaTurbo.js')).default(c) },
     'miiManager': { title: '⚠️ Mii Manager', render: async (c) => (await import('../apps/miiManager.js')).default(c) },
-    'themes': { title: '🎨 Thèmes & Couleurs', render: () => { if (typeof window.ThemeManager !== 'undefined') window.ThemeManager.openSelector(); } },
+    'themes': { title: 'Thèmes & Couleurs', render: (c) => c.innerHTML = '<div style="display:flex; height:100%; align-items:center; justify-content:center; color:#555; font-size:20px; font-weight:bold; text-align:center; padding:20px;">Cette application est en cours de création, à suivre...</div>' },
     'bio': {
       title: '👤 À propos de Hyl1a', render: (container) => {
         container.innerHTML = `
@@ -355,7 +356,7 @@ window.handleAppLaunch = function (trigger) {
 
     // Show splash screen
     window.showSplashScreen(() => {
-      if (appId === 'miiMaker' || appId === 'miiPlaza' || appId === 'gba' || appId === 'gbaTurbo' || appId === 'miiManager') {
+      if (appId === 'miiMaker' || appId === 'gba' || appId === 'gbaTurbo' || appId === 'miiManager') {
         const bgVid = document.getElementById('bg-video');
         if (bgVid && !bgVid.paused) bgVid.pause();
         

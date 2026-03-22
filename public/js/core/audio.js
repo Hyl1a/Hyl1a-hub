@@ -22,6 +22,9 @@ window.AudioManager = {
   get appBgm() { return AudioState.appBgm; },
   set appBgm(v) { AudioState.appBgm = v; },
   get analyser() { return AudioState.analyser; },
+  get playlist() { return AudioState.playlist; },
+  get currentTrackIndex() { return AudioState.currentTrackIndex; },
+  set currentTrackIndex(v) { AudioState.currentTrackIndex = v; },
 
   init,
   playClick,

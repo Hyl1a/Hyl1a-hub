@@ -4,12 +4,13 @@
 
 #modern-visualizer-container {
   position: fixed;
-  bottom: 110px;
+  bottom: 90px;
   left: 50%;
   transform: translateX(-50%);
   width: 800px;
   height: 120px;
-  z-index: 195; /* Behind bottom bar (200) */
+  z-index: 195;
+  /* Behind bottom bar (200) */
   pointer-events: none;
 }
 

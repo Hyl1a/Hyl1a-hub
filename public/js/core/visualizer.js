@@ -163,7 +163,7 @@ const ModernVisualizer = {
         // Performance optimization: Disable expensive shadowBlur if the bar is practically idle
         if (barHeight > barWidth * 2) {
             // Iconic bright soft blue/white glow, characteristic of Wii interfaces
-            this.ctx.shadowColor = `hsla(${hue}, 90%, 80%, 0.6)`;
+            this.ctx.shadowColor = `rgba(111, 208, 255, 0.6)`;
             this.ctx.shadowBlur = width > 800 ? 12 : 8; // Refined blur
         } else {
             this.ctx.shadowBlur = 0; // Saves massive GPU cost on idle

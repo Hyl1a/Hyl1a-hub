@@ -53,13 +53,7 @@ window.Auth = {
             localStorage.setItem('nostalgia_current_user', this.currentUsername);
             localStorage.setItem('nostalgia_current_user_tag', this.currentUserTag);
             
-            // Apply default theme if requested or initialize theme manager
-            if (window.ThemeManager) {
-               window.ThemeManager.apply('default', false);
-               window.ThemeManager.init();
-            }
-
-             // Trigger UI updates in app.js if they are ready
+                         // Trigger UI updates in app.js if they are ready
              if (document.getElementById('top-username')) {
                 document.getElementById('top-username').textContent = this.currentUsername;
                 document.getElementById('auth-overlay').style.display = 'none';
