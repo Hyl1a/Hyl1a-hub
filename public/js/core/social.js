@@ -97,15 +97,20 @@ window.SocialSystem = {
 
     } else if (tab === 'global') {
       document.getElementById('btn-global').classList.add('active');
-      header.textContent = "Chat Global";
+      header.textContent = "Plaza Globale";
       leftCol.style.opacity = '1';
-      this.renderGlobalChat(listInner);
+      this.fetchGlobalUsers(); // Restore user list on the left
+      this.renderGlobalChat(document.getElementById('social-right-col')); // Chat on the right
 
     } else if (tab === 'messages') {
       document.getElementById('btn-messages').classList.add('active');
       header.textContent = "Messages Privés";
       leftCol.style.opacity = '1';
+      this.resetRightCol(); // Restore Mii Focus Zone
       this.renderPrivateMessagesList(listInner);
+    } else {
+      // For profile and friends, ensure right col is Mii Focus
+      this.resetRightCol();
     }
   },
 
@@ -122,6 +127,29 @@ window.SocialSystem = {
     if (window.AudioManager && AudioManager.playBack) {
       AudioManager.playBack();
     }
+  },
+
+  resetRightCol() {
+    const rightCol = document.getElementById('social-right-col');
+    if (!rightCol) return;
+    
+    // Restore Mii Focus UI
+    rightCol.innerHTML = `
+      <div id="social-focus-speech" class="speech-bubble mii-glass-panel">
+        <span id="stat-bio">Explorez les profils ici !</span>
+      </div>
+      <div id="social-focus-mii-container">
+        <img id="social-focus-mii" src="public/assets/icons/mii.webp" alt="Mii" style="opacity: 0;">
+      </div>
+      <div id="social-focus-stats" class="stats-panel mii-glass-panel">
+        <div class="stat-wrapper"><div class="stat-header" id="stat-display-name">---</div></div>
+        <div class="stat-wrapper"><div class="stat-label">Sexe</div><div class="stat-value" id="stat-gender">--</div></div>
+        <div class="stat-wrapper"><div class="stat-label">Début</div><div class="stat-value" id="stat-creation">--</div></div>
+        <div class="stat-wrapper"><div class="stat-label">Jeu préféré</div><div class="stat-value" id="stat-favapp">--</div></div>
+      </div>
+    `;
+    // Re-trigger focus for first item if list exists
+    if (this.friends.length > 0) this.setFocusMii(this.friends[0]);
   },
 
   renderAddFriendUI() {
@@ -504,13 +532,17 @@ window.SocialSystem = {
   // --- NEW CHAT FUNCTIONS ---
 
   renderGlobalChat(container) {
+    if (!container) return;
+    
+    // Make container a chat box
     container.innerHTML = `
-      <div class="chat-container">
-        <div id="global-chat-messages" class="chat-messages">
+      <div class="chat-container full-height">
+        <div class="chat-header">Plaza Chat Global</div>
+        <div id="global-chat-messages" class="chat-messages smaller-text">
           <div style="text-align:center; padding:20px; opacity:0.5;">Chargement du chat...</div>
         </div>
-        <div class="chat-input-bar">
-          <input type="text" id="global-chat-input" class="chat-input" placeholder="Écrire un message..." maxlength="200">
+        <div class="chat-input-bar glass">
+          <input type="text" id="global-chat-input" class="chat-input" placeholder="Écrire un message..." maxlength="180">
           <button id="global-chat-send" class="chat-send-btn">➔</button>
         </div>
       </div>
