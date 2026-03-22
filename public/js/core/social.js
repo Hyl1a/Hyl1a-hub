@@ -62,7 +62,7 @@ window.SocialSystem = {
       // Populate Left Column with Account Info
       document.getElementById('social-list').innerHTML = `
         <div class="friend-card active" style="cursor:default; margin-bottom: 20px;">
-          <div class="friend-name" style="font-size: 22px;">${currentUser}<span class="friend-tag">#${currentTag}</span></div>
+          <div class="friend-name" style="font-size: 18px;">${currentUser}<span class="friend-tag">#${currentTag}</span></div>
         </div>
         <div style="padding: 10px 20px; color: #5f6f82; font-weight: 700;">
           <div style="margin-bottom: 15px;">
@@ -177,6 +177,7 @@ window.SocialSystem = {
     
     // Restore Mii Focus UI
     rightCol.innerHTML = `
+      <div id="social-mii-header" style="position:absolute; top:20px; font-weight:900; color:#5f6f82; letter-spacing:1px; z-index:10; font-size:18px; text-transform:uppercase; text-shadow: 0 1px 3px rgba(0,0,0,0.1);"></div>
       <div id="social-focus-speech" class="speech-bubble mii-glass-panel">
         <span id="stat-bio">Explorez les profils ici !</span>
       </div>
@@ -493,7 +494,11 @@ window.SocialSystem = {
       if (bioEl) bioEl.textContent = friend.bio || "Explorateur Hylia Plaza";
       
       const genEl = document.getElementById('stat-gender');
-      if (genEl) genEl.textContent = friend.gender || "Joueur";
+      if (genEl) {
+        let gender = friend.gender || "Utilisateur";
+        if (friend.b64) gender = this.detectMiiGender(friend.b64);
+        genEl.textContent = gender;
+      }
       
       const ptEl = document.getElementById('stat-playtime');
       if (ptEl) ptEl.textContent = friend.playtime || "??";
@@ -502,7 +507,16 @@ window.SocialSystem = {
       if (crEl) crEl.textContent = friend.creation || "2024";
       
       const favEl = document.getElementById('stat-favapp');
-      if (favEl) favEl.textContent = friend.favapp || "Hylia Plaza";
+      if (favEl) {
+          // GBA restriction for now
+          favEl.textContent = friend.favapp || "Pokémon Émeraude (GBA)";
+      }
+
+      const miiHeaderEl = document.getElementById('social-mii-header');
+      if (miiHeaderEl) {
+          const isSelf = friend.username === window.Auth.currentUsername;
+          miiHeaderEl.textContent = isSelf ? `MON MII avec ${friend.first_name || friend.username}` : `MII de ${friend.first_name || friend.username}`;
+      }
       
       // Try to fetch Mii if not present
       let displayB64 = friend.b64;
@@ -566,9 +580,21 @@ window.SocialSystem = {
       gender: "--",
       playtime: "0h",
       creation: "--",
-      favapp: "--",
+      favapp: "Pokémon Émeraude (GBA)",
       mii: 'public/assets/icons/logov2.webp'
     });
+  },
+
+  detectMiiGender(b64) {
+    try {
+      const binaryString = atob(b64);
+      const firstByte = binaryString.charCodeAt(0);
+      // Bit 0 of byte 0: 0 = Male, 1 = Female
+      return (firstByte & 1) === 1 ? "Femme" : "Homme";
+    } catch(e) { 
+      console.error("Mii Gender Detect Error:", e);
+      return "Utilisateur"; 
+    }
   },
 
   // --- NEW CHAT FUNCTIONS ---

@@ -132,7 +132,7 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
   padding-right: 10px;
 }
 
@@ -148,7 +148,7 @@
 .friend-card {
   background: linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.6));
   border-radius: 20px;
-  padding: 15px 20px;
+  padding: 10px 16px;
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -164,7 +164,7 @@
 }
 
 .friend-name {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
   color: #444;
 }
@@ -234,12 +234,12 @@
 
 .speech-bubble {
   position: absolute;
-  top: 10%;
+  top: 8%;
   right: 5%;
-  max-width: 250px;
-  padding: 20px 30px;
-  border-radius: 30px;
-  font-size: 16px;
+  max-width: 220px;
+  padding: 15px 25px;
+  border-radius: 25px;
+  font-size: 14px;
   font-weight: 700;
   color: #5f6f82;
   z-index: 10;
