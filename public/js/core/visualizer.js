@@ -42,32 +42,8 @@ const ModernVisualizer = {
     const playBtn = document.getElementById('vis-play');
     const nextBtn = document.getElementById('vis-next');
     const prevBtn = document.getElementById('vis-prev');
-    const trackTitle = document.getElementById('vis-track-title');
 
     if (!playBtn || typeof AudioManager === 'undefined') return;
-
-    window.updateVisualizerDisplay = () => {
-      // Modern visualizer update title/buttons
-      if (AudioManager.isPlayingMusic && AudioManager.playlist[AudioManager.currentTrackIndex]) {
-        const newTitle = AudioManager.playlist[AudioManager.currentTrackIndex].name;
-        
-        // Trigger animation only if title changed or play was pressed
-        if (trackTitle.textContent !== newTitle || trackTitle.style.opacity === "0" || trackTitle.style.opacity === "") {
-             trackTitle.textContent = newTitle;
-             
-             // Remove class, force reflow, re-add class to trigger animation perfectly
-             trackTitle.classList.remove('track-animate-in');
-             void trackTitle.offsetWidth; 
-             trackTitle.classList.add('track-animate-in');
-        }
-
-        playBtn.textContent = '⏸';
-      } else {
-        trackTitle.textContent = 'Aucune musique';
-        trackTitle.classList.remove('track-animate-in');
-        playBtn.textContent = '▶';
-      }
-    };
 
     playBtn.addEventListener('click', () => {
       if (AudioManager.isPlayingMusic) {
@@ -75,12 +51,10 @@ const ModernVisualizer = {
       } else {
         AudioManager.playNextMusic();
       }
-      window.updateVisualizerDisplay();
     });
 
     nextBtn.addEventListener('click', () => {
       AudioManager.playNextMusic();
-      window.updateVisualizerDisplay();
     });
 
     prevBtn.addEventListener('click', () => {
@@ -90,10 +64,7 @@ const ModernVisualizer = {
         AudioManager.currentTrackIndex -= 2;
       }
       AudioManager.playNextMusic();
-      window.updateVisualizerDisplay();
     });
-
-    window.updateVisualizerDisplay();
   },
   
   startLoop: function() {
@@ -209,24 +180,39 @@ const ModernVisualizer = {
   },
 
   updateTimeUI: function() {
-    if (typeof AudioManager === 'undefined' || !AudioManager.currentMusicAudio) return;
-    
-    const audio = AudioManager.currentMusicAudio;
+    const playBtn = document.getElementById('vis-play');
+    const trackTitle = document.getElementById('vis-track-title');
     const curEl = document.getElementById('vis-time-current');
     const totEl = document.getElementById('vis-time-total');
     
-    if (curEl && totEl) {
-        curEl.textContent = this.formatTime(audio.currentTime);
-        totEl.textContent = isNaN(audio.duration) ? "--:--" : this.formatTime(audio.duration);
+    if (typeof AudioManager === 'undefined') return;
+
+    const isPlaying = AudioManager.isPlayingMusic && AudioManager.currentMusicAudio;
+
+    if (!isPlaying) {
+        if (playBtn && playBtn.textContent !== '▶') playBtn.textContent = '▶';
+        if (trackTitle && trackTitle.textContent !== 'Aucune musique') trackTitle.textContent = 'Aucune musique';
+        if (curEl && curEl.textContent !== '00:00') curEl.textContent = '00:00';
+        if (totEl && totEl.textContent !== '00:00') totEl.textContent = '00:00';
+        return;
     }
 
+    if (playBtn && playBtn.textContent !== '⏸') playBtn.textContent = '⏸';
+
     // Also ensure title is correct
-    const trackTitle = document.getElementById('vis-track-title');
-    if (trackTitle && AudioManager.isPlayingMusic && AudioManager.playlist[AudioManager.currentTrackIndex]) {
+    if (trackTitle && AudioManager.playlist[AudioManager.currentTrackIndex]) {
         const expected = AudioManager.playlist[AudioManager.currentTrackIndex].name;
         if (trackTitle.textContent !== expected) {
             trackTitle.textContent = expected;
         }
+    }
+
+    const audio = AudioManager.currentMusicAudio;
+    if (curEl && totEl) {
+        const curTimeStr = this.formatTime(audio.currentTime || 0);
+        const totTimeStr = isNaN(audio.duration) ? "--:--" : this.formatTime(audio.duration);
+        if (curEl.textContent !== curTimeStr) curEl.textContent = curTimeStr;
+        if (totEl.textContent !== totTimeStr) totEl.textContent = totTimeStr;
     }
   },
 
