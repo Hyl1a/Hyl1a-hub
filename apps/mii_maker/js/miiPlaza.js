@@ -30,17 +30,24 @@ export default async function initMiiPlaza(container) {
     }, 400);
   });
 
-  // Fetch Avatars
+  // Fetch Avatars from Firestore instead of localhost
   let avatars = [];
   try {
-    const res = await fetch('http://localhost:3000/api/avatars');
-    if (res.ok) {
-      avatars = await res.json();
-    } else {
-      console.error("Failed to fetch avatars");
+    if (window.Firestore && window.FirebaseDB) {
+      const avatarsRef = window.Firestore.collection(window.FirebaseDB, "avatars");
+      const qSnap = await window.Firestore.getDocs(avatarsRef);
+      qSnap.forEach(doc => {
+        const d = doc.data();
+        if (d.visual_base64) {
+          avatars.push({ 
+            username: d.username || "Mii", 
+            visual_data: d.visual_base64 
+          });
+        }
+      });
     }
   } catch(e) {
-    console.error("API not reachable", e);
+    console.error("Firestore avatars fetch failed", e);
   }
   
   container.querySelector('#plaza-loading').style.display = 'none';

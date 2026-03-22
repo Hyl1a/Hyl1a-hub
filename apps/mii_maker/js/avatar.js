@@ -45,10 +45,18 @@ const AvatarSystem = {
     
     let avatarsData = [];
     try {
-      const apiBase = (window.Auth && window.Auth.API_BASE) ? window.Auth.API_BASE : 'http://localhost:3000';
-      const response = await fetch(`${apiBase}/api/avatars`);
-      if (response.ok) {
-        avatarsData = await response.json();
+      if (window.Firestore && window.FirebaseDB) {
+        const avatarsRef = window.Firestore.collection(window.FirebaseDB, "avatars");
+        const qSnap = await window.Firestore.getDocs(avatarsRef);
+        qSnap.forEach(doc => {
+          const d = doc.data();
+          if (d.visual_base64) {
+            avatarsData.push({ 
+              username: d.username, 
+              visual_data: { visual_base64: d.visual_base64 } 
+            });
+          }
+        });
       }
     } catch (e) {
       console.error("Error fetching avatars for plaza:", e);
