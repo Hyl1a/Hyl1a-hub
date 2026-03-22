@@ -23,6 +23,8 @@ const CarouselManager = {
       if (document.getElementById('auth-overlay').style.display !== 'none') return;
       if (document.body.classList.contains('app-open-active')) return;
       if (document.querySelector('.mii-fullscreen-container')) return;
+      if (document.body.classList.contains('social-active')) return;
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
       if (e.key === 'ArrowRight') {
         this.next();
