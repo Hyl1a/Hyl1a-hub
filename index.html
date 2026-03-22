@@ -133,20 +133,9 @@
       <button id="btn-home-logout" onclick="if(window.Auth) Auth.logout()" title="Déconnexion" style="background: rgba(255, 107, 107, 0.15); border: 1px solid rgba(255, 107, 107, 0.3); color: #ff8e8e; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 16px;">⏻</button>
     </div>
   </div>
-  <!-- FLOATING SOCIAL DOCK -->
-  <div id="social-floating-dock">
-    <div class="social-dock-item" onclick="SocialSystem.openOverlay('profile')" title="Mon Profil">
-      <img src="public/assets/icons/profil.webp" alt="Profile">
-    </div>
-    <div class="social-dock-item" onclick="SocialSystem.openOverlay('friends')" title="Amis">
-      <img src="public/assets/icons/ami.webp" alt="Amis">
-    </div>
-    <div class="social-dock-item" onclick="SocialSystem.openOverlay('messages')" title="Messages">
-      <img src="public/assets/icons/message.webp" alt="Messages">
-    </div>
-    <div class="social-dock-item" onclick="SocialSystem.openOverlay('global')" title="Global">
-      <img src="public/assets/icons/miiplaza.webp" alt="Global">
-    </div>
+  <!-- HUGE PROFILE BUTTON -->
+  <div id="huge-profile-btn" onclick="SocialSystem.openOverlay('profile')" title="Mon Profil">
+    <img src="public/assets/icons/profil.webp" alt="Profile">
   </div>
 
   <div id="clock-panel">
