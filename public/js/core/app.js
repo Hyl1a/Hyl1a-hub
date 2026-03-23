@@ -244,6 +244,8 @@ function initAppTriggers() {
     'browser': { title: 'Internet Browser', render: (c) => c.innerHTML = '<div style="display:flex; height:100%; align-items:center; justify-content:center; color:#555; font-size:20px; font-weight:bold; text-align:center; padding:20px;">Cette application est en cours de création, à suivre...</div>' },
     'gba': { title: '🎮 Émulateur GBA', render: async (c) => (await import('../../../apps/gba/js/gba.js')).default(c) },
     'gbaTurbo': { title: '🚀 GBA Turbo', render: async (c) => (await import('../apps/gbaTurbo.js')).default(c) },
+    'ds': { title: '🎮 Émulateur DS', render: async (c) => (await import('../../../apps/ds/js/ds.js')).default(c) },
+    'nes': { title: '🎮 Émulateur NES', render: async (c) => (await import('../../../apps/nes/js/nes.js')).default(c) },
     'miiManager': { title: '⚠️ Mii Manager', render: async (c) => (await import('../apps/miiManager.js')).default(c) },
     'themes': { title: 'Thèmes & Couleurs', render: (c) => c.innerHTML = '<div style="display:flex; height:100%; align-items:center; justify-content:center; color:#555; font-size:20px; font-weight:bold; text-align:center; padding:20px;">Cette application est en cours de création, à suivre...</div>' },
     'bio': {
