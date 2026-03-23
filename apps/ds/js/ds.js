@@ -1,7 +1,7 @@
 const DS_GAMES = [
-  { name: 'Pokémon Platine', file: 'apps/ds/assets/roms/3797 - Pokemon - Platinum Version (Europe) (Rev 10).nds', cover: 'public/assets/icons/pokemon_platinum.png' },
-  { name: 'Pokémon Or HeartGold', file: 'apps/ds/assets/roms/4786 - Pokemon - Version Or HeartGold (France) [b].nds', cover: 'public/assets/icons/pokemon_heartgold.png' },
-  { name: 'Pokémon Version Noire', file: 'apps/ds/assets/roms/5587 - Pokemon - Version Noire (France) (NDSi Enhanced).nds', cover: 'public/assets/icons/pokemon_black.png' },
+  { name: 'Pokémon Platine', file: '/apps/ds/assets/roms/3797 - Pokemon - Platinum Version (Europe) (Rev 10).nds', cover: 'public/assets/icons/pokemon_platinum.png' },
+  { name: 'Pokémon Or HeartGold', file: '/apps/ds/assets/roms/4786 - Pokemon - Version Or HeartGold (France) [b].nds', cover: 'public/assets/icons/pokemon_heartgold.png' },
+  { name: 'Pokémon Version Noire', file: '/apps/ds/assets/roms/5587 - Pokemon - Version Noire (France) (NDSi Enhanced).nds', cover: 'public/assets/icons/pokemon_black.png' },
 ];
 
 window.DS_GAMES = DS_GAMES;
@@ -236,7 +236,7 @@ function launchDsEmulator(container, game) {
         <div style="width:100px;"></div>
       </div>
       <div style="flex:1;position:relative;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#1a1a2e,#000);">
-        <iframe src="/apps/ds/emu_player.html?type=ds&rom=${romUrl}&name=${gameName}&core=melonds" style="border:none;width:100%;height:100%;max-width:1280px;" allow="autoplay;fullscreen"></iframe>
+        <iframe src="/apps/ds/emu_player.html?type=ds&rom=${romUrl}&name=${gameName}&core=melonds" style="border:none;width:100%;height:100%;" allow="autoplay;fullscreen"></iframe>
       </div>
     </div>
   `;

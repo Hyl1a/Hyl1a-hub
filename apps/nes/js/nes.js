@@ -1,5 +1,5 @@
 const NES_GAMES = [
-  { name: 'Super Mario Bros. 25th Anniversary', file: 'apps/nes/assets/roms/25th Anniversary Super Mario Bros. (Europe) (Promo, Virtual Console).zip', cover: 'public/assets/icons/mario_25th.png' },
+  { name: 'Super Mario Bros. 25th Anniversary', file: '/apps/nes/assets/roms/25th Anniversary Super Mario Bros. (Europe) (Promo, Virtual Console).zip', cover: 'public/assets/icons/mario_25th.png' },
 ];
 
 window.NES_GAMES = NES_GAMES;
@@ -234,7 +234,7 @@ function launchNesEmulator(container, game) {
         <div style="width:100px;"></div>
       </div>
       <div style="flex:1;position:relative;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#1a0a0a,#000);">
-        <iframe src="/apps/nes/emu_player.html?type=nes&rom=${romUrl}&name=${gameName}&core=fceumm" style="border:none;width:100%;height:100%;max-width:1280px;" allow="autoplay;fullscreen"></iframe>
+        <iframe src="/apps/nes/emu_player.html?type=nes&rom=${romUrl}&name=${gameName}&core=fceumm" style="border:none;width:100%;height:100%;" allow="autoplay;fullscreen"></iframe>
       </div>
     </div>
   `;
