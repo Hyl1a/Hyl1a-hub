@@ -181,16 +181,24 @@ window.Auth = {
     return this.currentUsername || localStorage.getItem('nostalgia_current_user');
   },
 
-  // Note: hasMii will scan Firestore instead of local API
-  async hasMii(username) {
-    if (!username) return false;
+  // Note: hasMii checks if the current user has a Mii avatar saved in Firestore
+  // Called with the Firebase user object or username string (handles both)
+  async hasMii(userOrUsername) {
+    if (!userOrUsername) return false;
     try {
+      // If called with a Firebase user object (has .uid), check by UID directly (fastest)
+      if (typeof userOrUsername === 'object' && userOrUsername.uid) {
+        const avatarRef = doc(window.FirebaseDB, "avatars", userOrUsername.uid);
+        const avatarSnap = await getDoc(avatarRef);
+        return avatarSnap.exists() && !!avatarSnap.data().visual_base64;
+      }
+      
+      // Fallback: called with a username string — scan all avatars
       const avatarsRef = collection(window.FirebaseDB, "avatars");
       const qSnap = await getDocs(avatarsRef);
-      // Client side filtering since we don't have complex queries setup yet
       let found = false;
-      qSnap.forEach((doc) => {
-        if (doc.data().username.toLowerCase() === username.toLowerCase()) {
+      qSnap.forEach((d) => {
+        if (d.data().username && d.data().username.toLowerCase() === userOrUsername.toLowerCase()) {
           found = true;
         }
       });

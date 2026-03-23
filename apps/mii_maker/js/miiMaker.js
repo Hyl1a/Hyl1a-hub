@@ -27,9 +27,12 @@ function startMiiMusic() {
   // Set Mii Maker background video
   const bgVideo = document.getElementById('bg-video');
   if (bgVideo) {
-    // Save current src if not already saved (to avoid overwriting with the mii maker one if called twice)
-    if (!originalVideoSrc || !bgVideo.src.includes('miimakerBC.mp4')) {
-      originalVideoSrc = bgVideo.src;
+    // The <video> tag uses a <source> child, so bgVideo.src may be empty.
+    // Read from <source> child or hardcode the known default as fallback.
+    if (!originalVideoSrc) {
+      const sourceChild = bgVideo.querySelector('source');
+      originalVideoSrc = (sourceChild && sourceChild.getAttribute('src'))
+        || 'public/assets/icons/video/menuBC.mp4';
     }
     bgVideo.src = 'public/assets/icons/video/miimakerBC.mp4';
     bgVideo.muted = true;
@@ -41,7 +44,6 @@ function startMiiMusic() {
         console.log("Mii Maker video background started successfully.");
     }).catch(e => {
         console.warn('Video play deferred or failed, trying interaction trigger:', e);
-        // Fallback: try play on next click
         const oncePlay = () => {
             bgVideo.play();
             document.removeEventListener('click', oncePlay);
@@ -439,20 +441,7 @@ async function initMiiMaker(container, gender = 0) {
   const closeBtn = container.querySelector('.mii-close-btn');
   if (closeBtn) closeBtn.addEventListener('click', closeMiiMaker);
 
-  container.querySelector('#btn-save').addEventListener('click', () => {
-    if (isQuestActive) {
-      const completed = Object.values(questProgress).filter(v => v).length;
-      const total = Object.keys(questProgress).length;
-      if (completed < total) {
-        const bubble = container.querySelector('#mii-tutorial-bubble');
-        bubble.style.animation = 'questError 0.5s ease-out';
-        setTimeout(() => { bubble.style.animation = 'bounce 2s infinite'; }, 500);
-        playMiiSFX('error');
-        return;
-      }
-    }
-    saveMii();
-  });
+  // Quest check is handled inside the save button's main async handler below
 
   // State
   let activeCategory = 'face';
@@ -933,6 +922,21 @@ async function initMiiMaker(container, gender = 0) {
   // Save with Forced Creation Bypass
   const saveBtn = container.querySelector('#btn-save');
   saveBtn.addEventListener('click', async () => {
+    // Quest check: block save if quest is active and not all steps done
+    if (isQuestActive) {
+      const completed = Object.values(questProgress).filter(v => v).length;
+      const total = Object.keys(questProgress).length;
+      if (completed < total) {
+        const bubble = container.querySelector('#mii-tutorial-bubble');
+        if (bubble) {
+          bubble.style.animation = 'questError 0.5s ease-out';
+          setTimeout(() => { bubble.style.animation = 'bounce 2s infinite'; }, 500);
+        }
+        playMiiSFX('error');
+        return;
+      }
+    }
+
     playMiiSFX('save');
     const data = getProfileData();
     if (!data.username) { alert("Please enter a Nickname before saving!"); return; }

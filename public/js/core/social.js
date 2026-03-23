@@ -124,7 +124,7 @@ window.SocialSystem = {
     const status = input.value.trim();
     
     try {
-      const userRef = window.Firestore.doc(window.Firestore.db, "users", window.Auth.currentUser.uid);
+      const userRef = window.Firestore.doc(window.FirebaseDB, "users", window.Auth.currentUser.uid);
       await window.Firestore.updateDoc(userRef, { status: status });
       
       // Update local stat-bio display if it exists (Focus Zone)
@@ -141,7 +141,7 @@ window.SocialSystem = {
   async loadMyStatus() {
     if (!window.Auth?.currentUser) return;
     try {
-      const userRef = window.Firestore.doc(window.Firestore.db, "users", window.Auth.currentUser.uid);
+      const userRef = window.Firestore.doc(window.FirebaseDB, "users", window.Auth.currentUser.uid);
       const snap = await window.Firestore.getDoc(userRef);
       if (snap.exists()) {
         const data = snap.data();
@@ -218,7 +218,7 @@ window.SocialSystem = {
 
     try {
       // 1. Listen for requests
-      const requestsRef = window.Firestore.collection(window.Firestore.db, "users", fbUser.uid, "friend_requests");
+      const requestsRef = window.Firestore.collection(window.FirebaseDB, "users", fbUser.uid, "friend_requests");
       this.unsubRequests = window.Firestore.onSnapshot(requestsRef, (snapshot) => {
         this.friendRequests = [];
         snapshot.forEach(doc => {
@@ -228,14 +228,14 @@ window.SocialSystem = {
       });
 
       // 2. Listen for actual friends
-      const friendsRef = window.Firestore.collection(window.Firestore.db, "users", fbUser.uid, "friends");
+      const friendsRef = window.Firestore.collection(window.FirebaseDB, "users", fbUser.uid, "friends");
       this.unsubFriends = window.Firestore.onSnapshot(friendsRef, async (snapshot) => {
         const friendsList = [];
         for (const friendDoc of snapshot.docs) {
           const friendUid = friendDoc.id;
           // Fetch full profile to get bio, gender, lastActive, etc.
           try {
-            const userRef = window.Firestore.doc(window.Firestore.db, "users", friendUid);
+            const userRef = window.Firestore.doc(window.FirebaseDB, "users", friendUid);
             const userSnap = await window.Firestore.getDoc(userRef);
             if (userSnap.exists()) {
               friendsList.push({ uid: friendUid, ...userSnap.data() });
@@ -412,7 +412,7 @@ window.SocialSystem = {
     
     try {
        // Search for user
-       const usersRef = window.Firestore.collection(window.Firestore.db, "users");
+       const usersRef = window.Firestore.collection(window.FirebaseDB, "users");
        const q = window.Firestore.query(usersRef, window.Firestore.where("username", "==", targetUsername), window.Firestore.where("tag", "==", targetTag));
        const qSnap = await window.Firestore.getDocs(q);
        
@@ -425,7 +425,7 @@ window.SocialSystem = {
        const targetUid = targetDoc.id;
        
        // Send request
-       const requestRef = window.Firestore.doc(window.Firestore.db, "users", targetUid, "friend_requests", fbUser.uid);
+       const requestRef = window.Firestore.doc(window.FirebaseDB, "users", targetUid, "friend_requests", fbUser.uid);
        await window.Firestore.setDoc(requestRef, {
          username: currentUsername,
          tag: currentTag,
@@ -450,7 +450,7 @@ window.SocialSystem = {
      
      try {
        // Add to my friends
-       const myFriendRef = window.Firestore.doc(window.Firestore.db, "users", fbUser.uid, "friends", senderUid);
+       const myFriendRef = window.Firestore.doc(window.FirebaseDB, "users", fbUser.uid, "friends", senderUid);
        await window.Firestore.setDoc(myFriendRef, {
          username: req.username,
          tag: req.tag,
@@ -458,7 +458,7 @@ window.SocialSystem = {
        });
        
        // Add me to their friends
-       const theirFriendRef = window.Firestore.doc(window.Firestore.db, "users", senderUid, "friends", fbUser.uid);
+       const theirFriendRef = window.Firestore.doc(window.FirebaseDB, "users", senderUid, "friends", fbUser.uid);
        await window.Firestore.setDoc(theirFriendRef, {
          username: window.Auth.currentUsername,
          tag: window.Auth.currentUserTag || "0000",
@@ -478,7 +478,7 @@ window.SocialSystem = {
      const fbUser = window.Auth ? window.Auth.currentUser : null;
      if(!fbUser) return;
      try {
-       const reqRef = window.Firestore.doc(window.Firestore.db, "users", fbUser.uid, "friend_requests", senderUid);
+       const reqRef = window.Firestore.doc(window.FirebaseDB, "users", fbUser.uid, "friend_requests", senderUid);
        await window.Firestore.deleteDoc(reqRef);
      } catch(e) {
        console.error("Reject error", e);
@@ -535,7 +535,7 @@ window.SocialSystem = {
       let displayB64 = friend.b64;
       if (!displayB64 && friend.uid) {
          try {
-           const avatarRef = window.Firestore.doc(window.Firestore.db, "avatars", friend.uid);
+           const avatarRef = window.Firestore.doc(window.FirebaseDB, "avatars", friend.uid);
            const avatarSnap = await window.Firestore.getDoc(avatarRef);
            if (avatarSnap.exists()) {
               displayB64 = avatarSnap.data().visual_base64;
@@ -636,7 +636,7 @@ window.SocialSystem = {
 
     // Real-time listener
     const q = window.Firestore.query(
-      window.Firestore.collection(window.Firestore.db, "global_messages"),
+      window.Firestore.collection(window.FirebaseDB, "global_messages"),
       window.Firestore.orderBy("timestamp", "desc"),
       window.Firestore.limit(50)
     );
@@ -666,10 +666,10 @@ window.SocialSystem = {
     if (!user) return;
 
     try {
-      await window.Firestore.addDoc(window.Firestore.collection(window.Firestore.db, "global_messages"), {
+      await window.Firestore.addDoc(window.Firestore.collection(window.FirebaseDB, "global_messages"), {
         uid: user.uid,
         username: window.Auth.currentUsername || "Anonyme",
-        first_name: localStorage.getItem('nostalgia_first_name') || "", 
+        first_name: window.Auth.currentUsername || "",
         text: text,
         timestamp: window.Firestore.serverTimestamp()
       });
@@ -739,7 +739,7 @@ window.SocialSystem = {
     input.onkeydown = (e) => { if(e.key === 'Enter') handleSend(); };
 
     const q = window.Firestore.query(
-      window.Firestore.collection(window.Firestore.db, "private_chats", chatId, "messages"),
+      window.Firestore.collection(window.FirebaseDB, "private_chats", chatId, "messages"),
       window.Firestore.orderBy("timestamp", "asc")
     );
 
@@ -762,14 +762,14 @@ window.SocialSystem = {
     if (!user) return;
 
     try {
-      const chatRef = window.Firestore.doc(window.Firestore.db, "private_chats", chatId);
+      const chatRef = window.Firestore.doc(window.FirebaseDB, "private_chats", chatId);
       await window.Firestore.setDoc(chatRef, {
         participants: chatId.split('_'),
         lastMessage: text,
         lastTimestamp: window.Firestore.serverTimestamp()
       }, { merge: true });
 
-      await window.Firestore.addDoc(window.Firestore.collection(window.Firestore.db, "private_chats", chatId, "messages"), {
+      await window.Firestore.addDoc(window.Firestore.collection(window.FirebaseDB, "private_chats", chatId, "messages"), {
         senderId: user.uid,
         text: text,
         timestamp: window.Firestore.serverTimestamp()
