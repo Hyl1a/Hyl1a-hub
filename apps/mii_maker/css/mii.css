@@ -35,11 +35,12 @@
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 0 16px;
+  padding: 0 120px; /* Reserve space for absolute title/controls */
   height: 70px;
   flex-shrink: 0;
-  gap: 8px;
+  gap: 6px;
   position: relative; /* Base for absolute children */
+  overflow-x: auto;
 }
 .mii-topbar-title {
   font-size: 18px;
@@ -56,7 +57,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 54px; height: 54px;
+  width: 48px; height: 48px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.15);
@@ -76,6 +77,11 @@
 }
 .mii-cat-btn:hover img, .mii-cat-btn:hover span {
   transform: scale(1.25);
+}
+.mii-cat-btn.active {
+  background: rgba(0, 189, 72, 0.4);
+  border-color: #53ee8f;
+  box-shadow: 0 0 12px rgba(0, 189, 72, 0.4);
 }
 .mii-cat-btn.active img, .mii-cat-btn.active span {
   transform: scale(1.1);
@@ -134,7 +140,7 @@
 #mii-loading-overlay {
   position: absolute;
   inset: 0;
-  display: flex;
+  display: none; /* Hidden by default; shown via JS until first render */
   justify-content: center;
   align-items: center;
   background: rgba(22,22,42,0.85);

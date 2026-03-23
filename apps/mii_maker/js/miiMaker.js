@@ -1,3 +1,5 @@
+let miiMusic = null;
+let mainMusicWasPlaying = false;
 let originalVideoSrc = null;
 
 function startMiiMusic() {
@@ -64,7 +66,9 @@ function stopMiiMusic() {
   const bgVideo = document.getElementById('bg-video');
   if (bgVideo && originalVideoSrc) {
     bgVideo.src = originalVideoSrc;
+    bgVideo.load();
     bgVideo.play().catch(() => {});
+    originalVideoSrc = null;
   }
 
   // Restore main music if it was playing before
@@ -618,13 +622,11 @@ async function initMiiMaker(container, gender = 0) {
 
   if (currentUser && window.Auth && window.Auth.currentUser) {
     if (isForcedCreation) {
-      // New user: skip the loading attempt from Firestore
-      const overlay = container.querySelector('#mii-loading-overlay');
-      if (overlay) overlay.style.display = 'none';
+      // New user: no Firestore load needed, keep overlay hidden
     } else {
       // Existing user: attempt to load their Mii
       const overlay = container.querySelector('#mii-loading-overlay');
-      if (overlay) overlay.textContent = "Loading your Mii...";
+      if (overlay) { overlay.textContent = "Loading your Mii..."; overlay.style.display = 'flex'; }
 
       try {
         const docRef = window.Firestore.doc(window.FirebaseDB, "avatars", window.Auth.currentUser.uid);
@@ -638,6 +640,10 @@ async function initMiiMaker(container, gender = 0) {
           currentProfile.bio = data.bio || "";
         }
       } catch (e) { console.error("Could not load Mii save:", e); }
+
+      // Hide overlay after Firestore load (the fetchMiiRender will hide it again after image loads)
+      const overlay2 = container.querySelector('#mii-loading-overlay');
+      if (overlay2) { overlay2.textContent = "Loading Preview..."; overlay2.style.display = 'none'; }
     }
   }
 
@@ -1065,13 +1071,18 @@ async function initMiiMaker(container, gender = 0) {
     const angle = ((rotationY % 360) + 360) % 360;
     const url = `https://mii-unsecure.ariankordi.net/miis/image.png?data=${encodeURIComponent(b64)}&verifyCharInfo=0&type=all_body&width=720&clothesColor=default&shaderType=wiiu&characterYRotate=${Math.round(angle)}&expression=${currentExpression}`;
 
+    // Show loading overlay only if no image has been shown yet
+    const overlay = container.querySelector('#mii-loading-overlay');
+    if (overlay && !previewImg.src) {
+      overlay.style.display = 'flex';
+    }
+
     // Create a background image to load the new render
     const newImg = new Image();
     newImg.onload = () => {
       // Swap immediately when loaded
       previewImg.src = newImg.src;
       // Hide loading overlay
-      const overlay = container.querySelector('#mii-loading-overlay');
       if (overlay) overlay.style.display = 'none';
 
       // Fade back in quickly for a smooth transition if we were fading
@@ -1080,11 +1091,9 @@ async function initMiiMaker(container, gender = 0) {
     };
     newImg.onerror = () => {
       console.error('Failed to load Mii preview render');
+      // Hide overlay even on error so the UI isn't stuck
+      if (overlay) overlay.style.display = 'none';
     };
-
-    // We don't dim the old image anymore for a "seamless" feel, 
-    // unless we want a very subtle feedback pulse:
-    // previewImg.style.opacity = '0.9'; 
 
     newImg.src = url;
   }
