@@ -358,7 +358,7 @@ window.handleAppLaunch = function (trigger) {
 
     // Show splash screen
     window.showSplashScreen(() => {
-      if (appId === 'miiMaker' || appId === 'gba' || appId === 'gbaTurbo' || appId === 'miiManager') {
+      if (appId === 'miiMaker' || appId === 'gba' || appId === 'gbaTurbo' || appId === 'miiManager' || appId === 'ds' || appId === 'nes') {
         const bgVid = document.getElementById('bg-video');
         // Let Mii Maker handle its own video transition to avoid race conditions with pause/play
         if (bgVid && appId !== 'miiMaker' && !bgVid.paused) bgVid.pause();
