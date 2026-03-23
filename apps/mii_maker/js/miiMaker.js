@@ -99,6 +99,16 @@ const loadScript = url => new Promise((resolve) => {
   document.head.appendChild(s);
 });
 
+// Preload Mii Maker background video as soon as this module loads,
+// so it's already buffered when the user opens Mii Maker (no delay).
+(function preloadMiiVideo() {
+  const link = document.createElement('link');
+  link.rel = 'preload';
+  link.as = 'video';
+  link.href = 'public/assets/icons/video/miimakerBC.mp4';
+  document.head.appendChild(link);
+})();
+
 export default async function renderMiiMaker(container) {
   // Load heavy dependencies instantly only when Mii Maker is opened
   try {
