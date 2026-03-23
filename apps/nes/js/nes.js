@@ -1,5 +1,5 @@
 const NES_GAMES = [
-  { name: 'Super Mario Bros. 25th Anniversary', file: 'apps/nes/assets/roms/25th Anniversary Super Mario Bros. (Europe) (Promo, Virtual Console).zip', cover: 'public/assets/icons/mario_25th.png' },
+  { name: 'Super Mario Bros. 25th Anniversary', file: '/apps/nes/assets/roms/25th Anniversary Super Mario Bros. (Europe) (Promo, Virtual Console).zip', cover: '/public/assets/icons/mario_25th.png' },
 ];
 
 // Expose globally

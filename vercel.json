@@ -25,6 +25,32 @@
           "value": "application/octet-stream"
         }
       ]
+    },
+    {
+      "source": "/(.*).nds",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/octet-stream"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).zip",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/octet-stream"
+        }
+      ]
     }
   ]
 }
