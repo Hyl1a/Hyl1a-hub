@@ -1,6 +1,5 @@
 const NES_GAMES = [
-  // Add your NES ROMs here — example:
-  // { name: 'Super Mario Bros.', file: 'apps/nes/assets/roms/Super Mario Bros. (World).nes', cover: '' },
+  { name: 'Super Mario Bros. 25th Anniversary', file: 'apps/nes/assets/roms/25th Anniversary Super Mario Bros. (Europe) (Promo, Virtual Console).zip', cover: 'public/assets/icons/mario_25th.png' },
 ];
 
 window.NES_GAMES = NES_GAMES;

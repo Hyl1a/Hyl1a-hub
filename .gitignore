@@ -3,3 +3,5 @@ database.sqlite
 .env
 .DS_Store
 mii-creator/node_modules/
+apps/*/assets/roms/
+public/assets/roms/
