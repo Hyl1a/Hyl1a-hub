@@ -1,7 +1,12 @@
 const DS_GAMES = [
-  { name: 'Pokémon Platine', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/3797 - Pokemon - Platinum Version (Europe) (Rev 10).nds', cover: '/public/assets/icons/pokemon_platinum.png' },
-  { name: 'Pokémon Or HeartGold', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/4786 - Pokemon - Version Or HeartGold (France) [b].nds', cover: '/public/assets/icons/pokemon_heartgold.png' },
-  { name: 'Pokémon Version Noire', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/5587 - Pokemon - Version Noire (France) (NDSi Enhanced).nds', cover: '/public/assets/icons/pokemon_black.png' },
+  { name: 'Mario Kart DS', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/0201 - Mario Kart DS (Europe) (En,Fr,De,Es,It).nds', cover: '/public/assets/icons/pokemon_platinum.png' },
+  { name: 'Frogger - Helmet Chaos', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/0322 - Frogger - Helmet Chaos (Europe) (En,Fr,De,Es,It).nds', cover: '' },
+  { name: 'Tetris DS', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/0413 - Tetris DS (Europe) (En,Fr,De,Es,It).nds', cover: '' },
+  { name: 'New Super Mario Bros.', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/0479 - New Super Mario Bros. (Europe) (En,Fr,De,Es,It).nds', cover: '' },
+  { name: 'TrackMania DS', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/2924 - TrackMania DS (Europe) (En,Fr,De,Es,It).nds', cover: '' },
+  { name: 'Pokémon Version Noire', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/Pokemon - Version Noire (France) (NDSi Enhanced).zip', cover: '/public/assets/icons/pokemon_black.png' },
+  { name: 'Super Mario 64 DS', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/Super Mario 64 DS (Europe) (En,Fr,De,Es,It).nds', cover: '' },
+  { name: 'WarioWare - Do It Yourself', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/WarioWare - Do It Yourself (Europe) (En,Fr,De,Es,It).nds', cover: '' },
 ];
 
 // Expose globally
