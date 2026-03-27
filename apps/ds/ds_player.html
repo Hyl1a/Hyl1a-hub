@@ -33,7 +33,7 @@
         const urlParams = new URLSearchParams(paramsString);
         let romUrl = urlParams.get('rom');
         let gameName = urlParams.get('name') || 'Unknown Game';
-        let core = urlParams.get('core') || 'melonds';
+        let core = urlParams.get('core') || 'desmume';
         
         // If the URL has #rom=... but not parsed well, try to manually extract
         if (!romUrl && window.location.hash.includes('rom=')) {
@@ -62,7 +62,8 @@
                 'save-state-location': 'browser',
                 'performance': 'true',
                 'lowlatency': 'true',
-                'rewind': 'false' 
+                'rewind': 'false',
+                'thread': 'true'
             };
             
             window.EJS_fixedSaveInterval = 5000;

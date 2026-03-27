@@ -334,7 +334,7 @@ function launchDsEmulator(container, game) {
         <div style="width: 100px;"></div>
       </div>
       <div style="flex: 1; position: relative; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #222, #000);">
-        <iframe src="/apps/ds/ds_player.html#rom=${romUrl}&name=${gameName}&core=melonds" style="border: none; width: 100%; height: 100%; max-width: 1280px;" allow="autoplay; fullscreen"></iframe>
+        <iframe src="/apps/ds/ds_player.html#rom=${romUrl}&name=${gameName}&core=desmume" style="border: none; width: 100%; height: 100%; max-width: 1280px;" allow="autoplay; fullscreen"></iframe>
       </div>
     </div>
   `;
