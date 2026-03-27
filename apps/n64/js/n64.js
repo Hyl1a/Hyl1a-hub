@@ -1,5 +1,5 @@
 const N64_GAMES = [
-  { name: 'Super Mario 64', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/Super Mario 64 (Europe) (En,Fr,De).n64', cover: '' },
+  { name: 'Super Mario 64', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/n64/Super Mario 64 (Europe) (En,Fr,De).n64', cover: '' },
   // Add more N64 ROMs here, e.g.:
   // { name: 'Game Name', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/n64/filename.z64', cover: '/public/assets/icons/cover.webp' },
 ];
