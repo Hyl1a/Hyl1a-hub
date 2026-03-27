@@ -1,7 +1,7 @@
 const DS_GAMES = [
-  { name: 'Pokémon Platine', file: '/apps/ds/assets/roms/3797 - Pokemon - Platinum Version (Europe) (Rev 10).nds', cover: '/public/assets/icons/pokemon_platinum.png' },
-  { name: 'Pokémon Or HeartGold', file: '/apps/ds/assets/roms/4786 - Pokemon - Version Or HeartGold (France) [b].nds', cover: '/public/assets/icons/pokemon_heartgold.png' },
-  { name: 'Pokémon Version Noire', file: '/apps/ds/assets/roms/5587 - Pokemon - Version Noire (France) (NDSi Enhanced).nds', cover: '/public/assets/icons/pokemon_black.png' },
+  { name: 'Pokémon Platine', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/3797 - Pokemon - Platinum Version (Europe) (Rev 10).nds', cover: '/public/assets/icons/pokemon_platinum.png' },
+  { name: 'Pokémon Or HeartGold', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/4786 - Pokemon - Version Or HeartGold (France) [b].nds', cover: '/public/assets/icons/pokemon_heartgold.png' },
+  { name: 'Pokémon Version Noire', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/ds/5587 - Pokemon - Version Noire (France) (NDSi Enhanced).nds', cover: '/public/assets/icons/pokemon_black.png' },
 ];
 
 // Expose globally

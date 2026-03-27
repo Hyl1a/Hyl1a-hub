@@ -1,8 +1,8 @@
 const GBA_GAMES = [
-  { name: 'Pokémon Émeraude', file: '/apps/gba/assets/roms/gba/Pokemon - Version Emeraude (France).gba', cover: '/public/assets/icons/pkmnemeraude.webp' },
-  { name: 'Pokémon Rouge Feu', file: '/apps/gba/assets/roms/gba/Pokemon - Version Rouge Feu (France).gba', cover: '/public/assets/icons/pkmnrouge.webp' },
-  { name: 'Kirby & the Amazing Mirror', file: '/apps/gba/assets/roms/gba/Kirby & the Amazing Mirror (Europe) (En,Fr,De,Es,It).zip', cover: '/public/assets/icons/kirby.webp' },
-  { name: 'The Legend of Zelda: The Minish Cap', file: '/apps/gba/assets/roms/gba/Legend of Zelda, The - The Minish Cap (Europe) (En,Fr,De,Es,It).zip', cover: '/public/assets/icons/zelda.webp' }
+  { name: 'Pokémon Émeraude', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/gba/Pokemon - Version Emeraude (France).gba', cover: '/public/assets/icons/pkmnemeraude.webp' },
+  { name: 'Pokémon Rouge Feu', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/gba/Pokemon - Version Rouge Feu (France).gba', cover: '/public/assets/icons/pkmnrouge.webp' },
+  { name: 'Kirby & the Amazing Mirror', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/gba/Kirby & the Amazing Mirror (Europe) (En,Fr,De,Es,It).zip', cover: '/public/assets/icons/kirby.webp' },
+  { name: 'The Legend of Zelda: The Minish Cap', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/gba/Legend of Zelda, The - The Minish Cap (Europe) (En,Fr,De,Es,It).zip', cover: '/public/assets/icons/zelda.webp' }
 ];
 
 // Expose globally for GBA Turbo to read

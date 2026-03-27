@@ -1,6 +1,6 @@
 const N64_GAMES = [
   // Add your N64 ROMs here, e.g.:
-  // { name: 'Super Mario 64', file: 'https://your-cloudflare-url/Super Mario 64.z64', cover: '/public/assets/icons/mario64.webp' },
+  // { name: 'Super Mario 64', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/rom/n64/Super Mario 64.z64', cover: '/public/assets/icons/mario64.webp' },
 ];
 
 // Expose globally
