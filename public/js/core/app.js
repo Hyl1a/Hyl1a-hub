@@ -246,6 +246,7 @@ function initAppTriggers() {
     'gbaTurbo': { title: '🚀 GBA Turbo', render: async (c) => (await import('../apps/gbaTurbo.js')).default(c) },
     'ds': { title: '🎮 Émulateur DS', render: async (c) => (await import('../../../apps/ds/js/ds.js')).default(c) },
     'nes': { title: '🎮 Émulateur NES', render: async (c) => (await import('../../../apps/nes/js/nes.js')).default(c) },
+    'n64': { title: '🎮 Émulateur N64', render: async (c) => (await import('../../../apps/n64/js/n64.js')).default(c) },
     'miiManager': { title: '⚠️ Mii Manager', render: async (c) => (await import('../apps/miiManager.js')).default(c) },
     'themes': { title: 'Thèmes & Couleurs', render: (c) => c.innerHTML = '<div style="display:flex; height:100%; align-items:center; justify-content:center; color:#555; font-size:20px; font-weight:bold; text-align:center; padding:20px;">Cette application est en cours de création, à suivre...</div>' },
     'bio': {
@@ -358,7 +359,7 @@ window.handleAppLaunch = function (trigger) {
 
     // Show splash screen
     window.showSplashScreen(() => {
-      if (appId === 'miiMaker' || appId === 'gba' || appId === 'gbaTurbo' || appId === 'miiManager' || appId === 'ds' || appId === 'nes') {
+      if (appId === 'miiMaker' || appId === 'gba' || appId === 'gbaTurbo' || appId === 'miiManager' || appId === 'ds' || appId === 'nes' || appId === 'n64') {
         const bgVid = document.getElementById('bg-video');
         // Let Mii Maker handle its own video transition to avoid race conditions with pause/play
         if (bgVid && appId !== 'miiMaker' && !bgVid.paused) bgVid.pause();
