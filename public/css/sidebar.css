@@ -61,8 +61,18 @@
 }
 
 .sidebar-btn:hover {
-  transform: translateY(-2px) scale(1.05);
-  filter: brightness(1.05);
+  transform: translateY(-3px) scale(1.08);
+  filter: brightness(1.08);
+}
+
+.sidebar-btn:hover .sidebar-label {
+  color: #3a7bd5;
+  text-shadow: 0 0 8px rgba(58, 123, 213, 0.3);
+}
+
+.sidebar-btn:active {
+  transform: translateY(0) scale(0.96);
+  transition-duration: 0.1s;
 }
 
 .sidebar-btn.active .sidebar-icon {

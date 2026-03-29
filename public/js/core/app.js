@@ -657,8 +657,18 @@ function initCompanion() {
 
   if (!widget || !bubble || !glass) return;
 
+  // Time-aware greeting
+  function getTimeGreeting() {
+    const h = new Date().getHours();
+    if (h < 6) return "Tu devrais dormir... 😴";
+    if (h < 12) return "Bonjour ! Belle matinée ☀️";
+    if (h < 18) return "Bon après-midi ! 🌤️";
+    if (h < 22) return "Bonne soirée ! 🌙";
+    return "Il se fait tard... 🌙";
+  }
+
   const phrases = [
-    "Poyo",
+    "Poyo !",
     "Tu veux jouer à quoi frro ?",
     "Hylia Plaza est trop cool ! (stp dis le)",
     "Coucou !",
@@ -666,9 +676,16 @@ function initCompanion() {
     "J'adore la musique ici !",
     "Tema, je flotte !",
     "Mii Maker est trop bien",
-    "Tu as vu le nouveau thème ?"
+    "Tu as vu le nouveau thème ?",
+    "Essaie l'émulateur GBA ! 🎮",
+    "N'oublie pas de créer ton Mii !",
+    "Ajoute des amis dans le Social !",
+    "La musique est chill ici 🎵",
+    "Pokémon Émeraude, c'est le GOAT",
+    getTimeGreeting()
   ];
 
+  let clickCount = 0;
   let bubbleTimeout;
 
   const showBubble = (text) => {
@@ -682,20 +699,32 @@ function initCompanion() {
   };
 
   glass.addEventListener('click', () => {
-    showBubble();
+    clickCount++;
+    
+    // Easter egg after 10 rapid clicks
+    if (clickCount >= 10) {
+      showBubble("Arrête de me cliquer ! 😵");
+      clickCount = 0;
+    } else {
+      showBubble();
+    }
+    
     if (typeof AudioManager !== 'undefined') {
       AudioManager.playPop();
     }
   });
+  
+  // Reset click counter after inactivity
+  setInterval(() => { if (clickCount > 0) clickCount--; }, 3000);
 
   // Small random greeting on hub load
-  setTimeout(() => showBubble("Poyo ! ✨"), 3000);
+  setTimeout(() => showBubble(getTimeGreeting()), 3000);
 
-  // Random interaction every minute
+  // Random interaction every 45-90 seconds
   setInterval(() => {
-    if (Math.random() > 0.6 && document.getElementById('auth-overlay').style.display === 'none') {
+    if (Math.random() > 0.5 && document.getElementById('auth-overlay').style.display === 'none') {
       showBubble();
     }
-  }, 60000);
+  }, 45000 + Math.random() * 45000);
 }
 

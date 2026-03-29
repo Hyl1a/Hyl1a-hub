@@ -17,6 +17,13 @@ window.SocialSystem = {
 
   init() {
     this.overlay = document.getElementById('social-overlay');
+    
+    // Escape key to close social overlay
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.overlay && !this.overlay.classList.contains('hidden')) {
+        this.closeOverlay();
+      }
+    });
   },
 
   openOverlay(tab) {
@@ -51,6 +58,13 @@ window.SocialSystem = {
     
     // Reset sidebars
     document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
+    
+    // Smooth fade transition between tabs
+    if (leftCol) {
+      leftCol.style.transition = 'opacity 0.15s ease';
+      leftCol.style.opacity = '0';
+      setTimeout(() => { leftCol.style.opacity = '1'; }, 50);
+    }
 
     if (tab === 'profile') {
       document.getElementById('btn-my-profile').classList.add('active');
@@ -691,7 +705,7 @@ window.SocialSystem = {
         `;
         messagesDiv.appendChild(msg);
       });
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
     });
   },
 
