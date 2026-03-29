@@ -56,13 +56,23 @@
             window.EJS_gameName = gameName; 
             window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/'; 
             window.EJS_startOnLoaded = true;
-            window.EJS_threads = false;
+            // Activer le multithreading SI le navigateur le supporte (boost énorme de FPS)
+            window.EJS_threads = typeof SharedArrayBuffer !== 'undefined';
+            
+            // Options du Core Mupen64Plus-Next pour forcer des grosses performances
+            window.EJS_coreOptions = {
+                "mupen64plus-next-CountPerOp": "1", // Mode haute performance (1 au lieu de 2)
+                "mupen64plus-next-EnableFBEmulation": "False", // Désactiver l'émulation du Framebuffer (très lourd)
+                "mupen64plus-next-BilinearMode": "standard",
+                "mupen64plus-next-Vsync": "False"
+            };
             
             window.EJS_defaultOptions = {
                 'save-state-location': 'browser',
                 'performance': 'true',
                 'lowlatency': 'true',
-                'rewind': 'false' 
+                'rewind': 'false',
+                'vsync': 'false' // Désactiver VSync pour éviter la perte de FPS
             };
             
             window.EJS_fixedSaveInterval = 5000;
