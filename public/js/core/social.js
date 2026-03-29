@@ -13,6 +13,7 @@ window.SocialSystem = {
   unsubRequests: null,
   unsubGlobal: null,
   unsubPrivate: null,
+  focusTimeout: null,
 
   init() {
     this.overlay = document.getElementById('social-overlay');
@@ -96,6 +97,7 @@ window.SocialSystem = {
       document.getElementById('btn-friends').classList.add('active');
       header.textContent = "Liste d'Amis";
       leftCol.style.opacity = '1';
+      this.resetRightCol();
       this.renderAddFriendUI();
       this.fetchRealFriends();
 
@@ -191,8 +193,11 @@ window.SocialSystem = {
         <div class="stat-wrapper"><div class="stat-label">Jeu préféré</div><div class="stat-value" id="stat-favapp">--</div></div>
       </div>
     `;
-    // Re-trigger focus for first item if list exists
-    if (this.friends.length > 0) this.setFocusMii(this.friends[0]);
+    // Re-trigger focus for first item if list exists (but not on profile tab where it clashes)
+    const isProfile = document.getElementById('btn-my-profile') && document.getElementById('btn-my-profile').classList.contains('active');
+    if (this.friends.length > 0 && !isProfile) {
+        this.setFocusMii(this.friends[0]);
+    }
   },
 
   renderAddFriendUI() {
@@ -489,6 +494,11 @@ window.SocialSystem = {
     const imgObj = document.getElementById('social-focus-mii');
     if(!imgObj) return;
     
+    if (this.focusTimeout) {
+      clearTimeout(this.focusTimeout);
+      this.focusTimeout = null;
+    }
+
     if(!friend) {
       imgObj.style.opacity = '0';
       return;
@@ -497,7 +507,7 @@ window.SocialSystem = {
     imgObj.style.opacity = '0'; 
     imgObj.style.transform = 'scale(0.95)';
     
-    setTimeout(async () => {
+    this.focusTimeout = setTimeout(async () => {
       const displayFocusName = friend.first_name || "";
       const nameEl = document.getElementById('stat-display-name');
       if (nameEl) nameEl.innerHTML = `${displayFocusName}<span style="opacity:0.6; font-size:0.7em;">#${friend.tag}</span>`;
