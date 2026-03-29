@@ -2,7 +2,10 @@
 
 #social-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 5000;
   display: flex;
   align-items: center;
@@ -17,8 +20,11 @@
 
 .social-backdrop {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.12);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(4px);
 }
 
@@ -37,15 +43,17 @@
   backdrop-filter: blur(30px) saturate(1.8);
   -webkit-backdrop-filter: blur(30px) saturate(1.8);
   border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 15px 50px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.8);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.8);
 }
 
 .social-window::before {
   content: '';
   position: absolute;
-  top: -20%; left: 0; right: 0;
+  top: -20%;
+  left: 0;
+  right: 0;
   height: 60%;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.7), transparent);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), transparent);
   filter: blur(8px);
   opacity: 0.6;
   pointer-events: none;
@@ -94,10 +102,10 @@
 
 #social-left-col {
   flex: 0 0 35%;
-  background: rgba(255,255,255,0.4);
+  background: rgba(255, 255, 255, 0.4);
   border-radius: 30px;
   padding: 20px;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
   overflow: visible;
 }
 
@@ -105,7 +113,7 @@
   width: 70%;
   height: 70%;
   object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 }
 
 
@@ -116,7 +124,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
   border-radius: 30px;
   overflow: visible;
 }
@@ -136,36 +144,46 @@
   flex-direction: column;
   gap: 10px;
   padding-right: 10px;
+  padding-left: 8px;
+  /* Room for active card scale */
   padding-bottom: 15px;
+  transform: translateZ(0); /* Force GPU scrolling to avoid parent blur recalculation lag */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Custom scrollbar for list */
 .social-list-scroll::-webkit-scrollbar {
   width: 8px;
 }
+
 .social-list-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.15);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 4px;
 }
 
 .friend-card {
-  background: linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.6));
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.6));
   border-radius: 20px;
   padding: 10px 16px;
-  margin: 4px; /* Essential to prevent box-shadow clipping */
+  margin: 6px;
+  /* Essential to prevent box-shadow and scale clipping */
   display: flex;
   flex-direction: column;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05), inset 0 2px 4px rgba(255,255,255,0.8);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.8);
   position: relative;
   flex-shrink: 0;
+  content-visibility: auto; /* Massive scroll performance boost */
+  contain-intrinsic-size: 65px; /* Tell browser approximate height of card */
+  will-change: transform;
 }
 
-.friend-card:hover, .friend-card.active {
+.friend-card:hover,
+.friend-card.active {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 0 0 3px rgba(111,208,255,0.6), 0 8px 15px rgba(0,0,0,0.1);
-  background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0.8));
+  box-shadow: 0 0 0 3px rgba(111, 208, 255, 0.6), 0 8px 15px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.8));
 }
 
 .friend-name {
@@ -175,9 +193,11 @@
 }
 
 .friend-tag {
-  font-size: 13px;
+  font-size: 15px;
+  /* Enlarged */
   color: #888;
-  font-weight: 600;
+  font-weight: 700;
+  margin-left: 2px;
 }
 
 .friend-bio-small {
@@ -207,7 +227,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 }
 
 .friend-status-dot.online {
@@ -234,8 +254,15 @@
   max-height: 80%;
   max-width: 80%;
   object-fit: contain;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.25));
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.25));
   transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* --- FOND DU MII (AJOUTÉ À TA DEMANDE) --- */
+  background-color: #a2ffff6e;
+  /* <-- TU PEUX CHANGER LA COULEUR ICI ! */
+  border: 5px solid rgba(255, 255, 255, 0.445);
+  border-radius: 30px;
+  padding: 15px;
 }
 
 .speech-bubble {
@@ -253,21 +280,15 @@
 }
 
 .speech-bubble::after {
-  content: '';
-  position: absolute;
-  bottom: -15px;
-  left: 20%;
-  border-width: 15px 15px 0;
-  border-style: solid;
-  border-color: rgba(255, 255, 255, 0.9) transparent transparent transparent;
-  display: block;
-  width: 0;
+  display: none;
+  /* Triangle removed per user request */
 }
 
 .stats-panel {
   position: absolute;
   bottom: 0;
-  left: 5%; right: 5%;
+  left: 5%;
+  right: 5%;
   border-radius: 25px;
   padding: 15px 20px;
   display: flex;
@@ -291,24 +312,42 @@
   margin-bottom: 5px;
 }
 
-.stat-value, .stat-header {
+.stat-value,
+.stat-header {
   font-size: 16px;
   font-weight: 800;
-  color: #6fd0ff;
-  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+  color: #242a3ac2;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
   word-break: break-word;
 }
 
 @keyframes popIn {
-  0% { opacity: 0; transform: scale(0.95) translateY(20px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 /* --- Chat UI Styles --- */
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: calc(94vh - 120px); /* Adjust based on social window size */
+  height: calc(94vh - 120px);
+  /* Adjust based on social window size */
+
+  /* --- FOND DU CHAT (AJOUTÉ À TA DEMANDE) --- */
+  background-color: rgba(190, 227, 241, 0.5);
+  /* <-- TU PEUX CHANGER LA COULEUR/TRANSPARENCE ICI ! */
+  border: 4px solid rgba(157, 216, 243, 0.342);
+  border-radius: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  /* Pour garder les coins bien arrondis */
 }
 
 .chat-messages {
@@ -320,7 +359,7 @@
   flex-direction: column;
   gap: 12px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0,0,0,0.1) transparent;
+  scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
 }
 
 .message-bubble {
@@ -330,14 +369,21 @@
   font-size: 14px;
   line-height: 1.4;
   position: relative;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   animation: messagePop 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
   word-wrap: break-word;
 }
 
 @keyframes messagePop {
-  from { opacity: 0; transform: translateY(10px) scale(0.95); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .message-bubble.self {
@@ -362,24 +408,25 @@
 
 .message-bubble.self .message-info {
   text-align: right;
-  color: rgba(255,255,255,0.8);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .chat-input-bar {
   display: flex;
   padding: 15px;
   gap: 12px;
-  background: rgba(255,255,255,0.4);
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(0,0,0,0.05);
-  border-radius: 0 0 30px 30px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 0 0 26px 26px;
+  /* Matched to parent's inner radius (30px - 4px) to fix corner bugs */
 }
 
 .chat-input {
   flex: 1;
   padding: 12px 20px;
   border-radius: 25px;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   background: white;
   font-size: 15px;
   outline: none;
@@ -418,11 +465,13 @@
 .chat-messages::-webkit-scrollbar {
   width: 6px;
 }
+
 .chat-messages::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .chat-messages::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 
@@ -440,8 +489,9 @@
   font-weight: 800;
   color: #5f6f82;
   text-align: center;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-  border-radius: 30px 30px 0 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 26px 26px 0 0;
+  /* Matched to parent's inner radius */
 }
 
 .smaller-text .message-text {
@@ -449,6 +499,324 @@
 }
 
 .chat-input-bar.glass {
-  background: rgba(255,255,255,0.25);
-  border-top: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ====================================================
+   RESPONSIVE — Prevent overlapping on smaller screens
+   ==================================================== */
+
+/* --- Medium screens (laptops 1366px, 1280px) --- */
+@media (max-width: 1400px) {
+  .social-window {
+    width: 92vw;
+    height: 90vh;
+    padding: 20px;
+    border-radius: 30px;
+    gap: 0;
+  }
+
+  .social-content {
+    gap: 20px;
+  }
+
+  #social-left-col {
+    flex: 0 0 32%;
+    padding: 15px;
+    border-radius: 22px;
+  }
+
+  .social-header {
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+
+  .friend-card {
+    padding: 8px 12px;
+    border-radius: 16px;
+  }
+
+  .friend-name {
+    font-size: 14px;
+  }
+
+  .friend-tag {
+    font-size: 13px;
+  }
+
+  .friend-bio-small {
+    font-size: 12px;
+  }
+
+  .stats-panel {
+    padding: 10px 15px;
+    border-radius: 20px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+  }
+
+  .stat-value,
+  .stat-header {
+    font-size: 14px;
+  }
+
+  .speech-bubble {
+    font-size: 12px;
+    padding: 10px 16px;
+  }
+
+  #social-focus-mii {
+    max-height: 70%;
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 22px;
+  }
+
+  .chat-header {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .chat-input-bar {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .chat-input {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .chat-send-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+}
+
+/* --- Smaller screens (old laptops, 1024px) --- */
+@media (max-width: 1100px) {
+  .social-window {
+    width: 96vw;
+    height: 92vh;
+    padding: 15px;
+    border-radius: 24px;
+  }
+
+  .social-window::before {
+    display: none; /* Remove decorative glint on small screens */
+  }
+
+  .social-content {
+    gap: 12px;
+  }
+
+  #social-left-col {
+    flex: 0 0 38%;
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .social-header {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .social-list-scroll {
+    gap: 6px;
+    padding-right: 6px;
+    padding-left: 4px;
+  }
+
+  .friend-card {
+    padding: 7px 10px;
+    border-radius: 14px;
+    margin: 4px;
+  }
+
+  .friend-name {
+    font-size: 13px;
+  }
+
+  .friend-tag {
+    font-size: 12px;
+  }
+
+  .friend-bio-small {
+    font-size: 11px;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+
+  .friend-gender {
+    font-size: 10px;
+    margin-top: 4px;
+  }
+
+  .stats-panel {
+    padding: 8px 12px;
+    border-radius: 16px;
+    left: 3%;
+    right: 3%;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .stat-wrapper {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .stat-label {
+    font-size: 9px;
+  }
+
+  .stat-value,
+  .stat-header {
+    font-size: 12px;
+  }
+
+  #social-focus-mii {
+    max-height: 60%;
+    max-width: 60%;
+    padding: 8px;
+    border-width: 3px;
+    border-radius: 18px;
+  }
+
+  .speech-bubble {
+    font-size: 11px;
+    padding: 8px 14px;
+    max-width: 70%;
+    border-radius: 16px;
+  }
+
+  .social-close {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    top: -12px;
+    right: -12px;
+  }
+
+  .message-bubble {
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 14px;
+  }
+
+  .message-info {
+    font-size: 10px;
+  }
+
+  .chat-container {
+    border-radius: 22px;
+    border-width: 3px;
+  }
+
+  .chat-header {
+    border-radius: 19px 19px 0 0;
+  }
+
+  .chat-input-bar {
+    border-radius: 0 0 19px 19px;
+  }
+}
+
+/* --- Very small screens / tablets --- */
+@media (max-width: 850px) {
+  .social-window {
+    width: 98vw;
+    height: 96vh;
+    max-height: none;
+    padding: 10px;
+    border-radius: 18px;
+  }
+
+  .social-content {
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+  }
+
+  #social-left-col {
+    flex: none;
+    max-height: 50vh;
+    border-radius: 16px;
+    overflow-y: auto;
+  }
+
+  #social-right-col {
+    flex: none;
+    min-height: 300px;
+    border-radius: 16px;
+  }
+
+  .social-header {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .stats-panel {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .social-close {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+    top: -8px;
+    right: -8px;
+  }
+}
+
+/* --- Height-constrained screens (e.g. 768px tall) --- */
+@media (max-height: 750px) {
+  .social-window {
+    height: 95vh;
+    max-height: none;
+    padding: 12px;
+  }
+
+  .social-header {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  #social-focus-mii {
+    max-height: 55%;
+    max-width: 55%;
+    padding: 6px;
+  }
+
+  .stats-panel {
+    padding: 8px 10px;
+  }
+
+  .stat-label {
+    font-size: 9px;
+    margin-bottom: 2px;
+  }
+
+  .stat-value,
+  .stat-header {
+    font-size: 12px;
+  }
+
+  .friend-card {
+    padding: 6px 10px;
+  }
+
+  .social-list-scroll {
+    gap: 5px;
+  }
 }

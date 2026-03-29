@@ -63,7 +63,7 @@ window.SocialSystem = {
       // Populate Left Column with Account Info
       document.getElementById('social-list').innerHTML = `
         <div class="friend-card active" style="cursor:default; margin-bottom: 20px;">
-          <div class="friend-name" style="font-size: 18px;">${currentUser}<span class="friend-tag">#${currentTag}</span></div>
+          <div class="friend-name" style="font-size: 18px; display:flex; align-items:baseline;">${currentUser}<span class="friend-tag" style="margin-left: 2px;">#${currentTag}</span></div>
         </div>
         <div style="padding: 10px 20px; color: #5f6f82; font-weight: 700;">
           <div style="margin-bottom: 15px;">
@@ -131,7 +131,15 @@ window.SocialSystem = {
       
       // Update local stat-bio display if it exists (Focus Zone)
       const bioEl = document.getElementById('stat-bio');
-      if (bioEl) bioEl.textContent = status || "Ceci est une bio de test.";
+      const speechEl = document.getElementById('social-focus-speech');
+      if (bioEl && speechEl) {
+          if (status) {
+              speechEl.style.display = 'block';
+              bioEl.textContent = status;
+          } else {
+              speechEl.style.display = 'none';
+          }
+      }
       
       alert("Statut mis à jour !");
     } catch (e) {
@@ -151,7 +159,15 @@ window.SocialSystem = {
         if (input && data.status) input.value = data.status;
         
         const bioEl = document.getElementById('stat-bio');
-        if (bioEl) bioEl.textContent = data.status || "Ceci est une bio de test.";
+        const speechEl = document.getElementById('social-focus-speech');
+        if (bioEl && speechEl) {
+            if (data.status) {
+                speechEl.style.display = 'block';
+                bioEl.textContent = data.status;
+            } else {
+                speechEl.style.display = 'none';
+            }
+        }
       }
     } catch (e) {
       console.error("Status load error:", e);
@@ -180,14 +196,14 @@ window.SocialSystem = {
     // Restore Mii Focus UI
     rightCol.innerHTML = `
       <div id="social-mii-header" style="position:absolute; top:20px; font-weight:900; color:#5f6f82; letter-spacing:1px; z-index:10; font-size:18px; text-transform:uppercase; text-shadow: 0 1px 3px rgba(0,0,0,0.1);"></div>
-      <div id="social-focus-speech" class="speech-bubble mii-glass-panel">
-        <span id="stat-bio">Explorez les profils ici !</span>
+      <div id="social-focus-speech" class="speech-bubble mii-glass-panel" style="display: none;">
+        <span id="stat-bio"></span>
       </div>
       <div id="social-focus-mii-container">
         <img id="social-focus-mii" src="public/assets/icons/mii.webp" alt="Mii" style="opacity: 0;">
       </div>
       <div id="social-focus-stats" class="stats-panel mii-glass-panel">
-        <div class="stat-wrapper"><div class="stat-header" id="stat-display-name">---</div></div>
+        <div class="stat-wrapper"><div class="stat-label">Tag</div><div class="stat-header" id="stat-display-name">---</div></div>
         <div class="stat-wrapper"><div class="stat-label">Sexe</div><div class="stat-value" id="stat-gender">--</div></div>
         <div class="stat-wrapper"><div class="stat-label">Début</div><div class="stat-value" id="stat-creation">--</div></div>
         <div class="stat-wrapper"><div class="stat-label">Jeu préféré</div><div class="stat-value" id="stat-favapp">--</div></div>
@@ -508,12 +524,20 @@ window.SocialSystem = {
     imgObj.style.transform = 'scale(0.95)';
     
     this.focusTimeout = setTimeout(async () => {
-      const displayFocusName = friend.first_name || "";
       const nameEl = document.getElementById('stat-display-name');
-      if (nameEl) nameEl.innerHTML = `${displayFocusName}<span style="opacity:0.6; font-size:0.7em;">#${friend.tag}</span>`;
+      if (nameEl) nameEl.innerHTML = `<span style="opacity:0.75; font-size:1em;">#${friend.tag}</span>`;
       
       const bioEl = document.getElementById('stat-bio');
-      if (bioEl) bioEl.textContent = friend.bio || "Explorateur Hylia Plaza";
+      const speechEl = document.getElementById('social-focus-speech');
+      if (bioEl && speechEl) {
+          const text = friend.bio || "";
+          if (text.trim() === "" || text === "Explorateur Hylia Plaza" || text === "Aucun personnage Mii trouvé pour ce compte.") {
+              speechEl.style.display = 'none';
+          } else {
+              speechEl.style.display = 'block';
+              bioEl.textContent = text;
+          }
+      }
       
       const genEl = document.getElementById('stat-gender');
       if (genEl) {
