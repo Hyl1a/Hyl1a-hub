@@ -47,7 +47,7 @@
 
         // Isolate save states by user profile
         const currentUser = localStorage.getItem('nostalgia_current_user') || 'Guest';
-        gameName = `${currentUser}_${gameName}`;
+        gameName = `${currentUser}_${gameName}`.replace(/[^a-zA-Z0-9_-]/g, '_');
 
         if (romUrl) {
             window.EJS_player = '#game';
@@ -61,7 +61,7 @@
             // Performance flags
             const isTurbo = core === 'gpsp' || core === 'gba_turbo';
             window.EJS_defaultOptions = {
-                // 'save-state-location': 'browser',
+                'save-state-location': 'browser',
                 'f-skip': isTurbo ? '1' : '0', // Keep it conservative for stability
                 'performance': 'true',
                 'lowlatency': 'true',

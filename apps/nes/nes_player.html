@@ -47,7 +47,7 @@
 
         // Isolate save states by user profile
         const currentUser = localStorage.getItem('nostalgia_current_user') || 'Guest';
-        gameName = `${currentUser}_${gameName}`;
+        gameName = `${currentUser}_${gameName}`.replace(/[^a-zA-Z0-9_-]/g, '_');
 
         if (romUrl) {
             window.EJS_player = '#game';
@@ -59,7 +59,7 @@
             window.EJS_threads = false;
             
             window.EJS_defaultOptions = {
-                // 'save-state-location': 'browser', 
+                'save-state-location': 'browser', 
                 'performance': 'true',
                 'lowlatency': 'true',
                 'rewind': 'false' 
