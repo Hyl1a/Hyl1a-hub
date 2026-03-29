@@ -41,6 +41,7 @@ body, html {
   height: 100%;
   object-fit: cover;
   z-index: -10; /* Far back but visible through transparent body */
+  filter: brightness(0.7);
 }
 
 /* Base utility classes for soft UI feel */
