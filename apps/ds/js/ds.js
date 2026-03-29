@@ -1,11 +1,13 @@
 const DS_GAMES = [
-  { name: 'Mario Kart DS', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/0201 - Mario Kart DS (Europe) (En,Fr,De,Es,It).nds', cover: '/public/assets/icons/pokemon_platinum.png' },
+  { name: 'Mario Kart DS', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/0201 - Mario Kart DS (Europe) (En,Fr,De,Es,It).nds', cover: '' },
+  { name: 'Pokémon Version Noire', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/Pokemon - Version Noire (France) (NDSi Enhanced).zip', cover: '/public/assets/icons/pokemon_black.png' },
+  { name: 'Pokémon Platine', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/Pokemon%20-%20Version%20Platine%20(France).nds', cover: '/public/assets/icons/pokemon_platinum.png' },
+  { name: 'Pokémon HeartGold', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/Pokemon%20-%20Version%20Or%20HeartGold%20(France).nds', cover: '/public/assets/icons/pokemon_heartgold.png' },
+  { name: 'Super Mario 64 DS', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/Super Mario 64 DS (Europe) (En,Fr,De,Es,It).nds', cover: '' },
+  { name: 'New Super Mario Bros.', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/0479 - New Super Mario Bros. (Europe) (En,Fr,De,Es,It).nds', cover: '' },
   { name: 'Frogger - Helmet Chaos', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/0322 - Frogger - Helmet Chaos (Europe) (En,Fr,De,Es,It).nds', cover: '' },
   { name: 'Tetris DS', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/0413 - Tetris DS (Europe) (En,Fr,De,Es,It).nds', cover: '' },
-  { name: 'New Super Mario Bros.', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/0479 - New Super Mario Bros. (Europe) (En,Fr,De,Es,It).nds', cover: '' },
   { name: 'TrackMania DS', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/2924 - TrackMania DS (Europe) (En,Fr,De,Es,It).nds', cover: '' },
-  { name: 'Pokémon Version Noire', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/Pokemon - Version Noire (France) (NDSi Enhanced).zip', cover: '/public/assets/icons/pokemon_black.png' },
-  { name: 'Super Mario 64 DS', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/Super Mario 64 DS (Europe) (En,Fr,De,Es,It).nds', cover: '' },
   { name: 'WarioWare - Do It Yourself', file: 'https://pub-045046eb23854c6e897afff1193bf9bf.r2.dev/ds/WarioWare - Do It Yourself (Europe) (En,Fr,De,Es,It).nds', cover: '' },
 ];
 
