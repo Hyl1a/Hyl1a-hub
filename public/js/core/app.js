@@ -347,8 +347,8 @@ window.handleAppLaunch = function (trigger) {
     if (typeof AudioManager !== 'undefined') {
       if (appId === 'miiMaker') {
         AudioManager.playAppLaunchTransition('miiLaunch');
-      } else if (appId === 'gba') {
-        AudioManager.playAppLaunchTransition('gbaLaunch', 'gbaBgm');
+      } else if (appId === 'gba' || appId === 'ds' || appId === 'nes' || appId === 'n64') {
+        AudioManager.playAppLaunchTransition(appId === 'gba' ? 'gbaLaunch' : 'defaultLaunch', 'gbaBgm');
       } else {
         // Fallback: Play default launch sound for other apps
         if (appId !== 'themes') {

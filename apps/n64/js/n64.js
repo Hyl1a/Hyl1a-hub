@@ -338,9 +338,13 @@ function launchN64Emulator(container, game) {
   backBtn.addEventListener('mouseover', () => backBtn.style.background = 'rgba(255,255,255,0.2)');
   backBtn.addEventListener('mouseout', () => backBtn.style.background = 'rgba(255,255,255,0.1)');
   backBtn.addEventListener('click', () => {
+    if (!window.confirm("Voulez-vous vraiment quitter ce jeu ?\\n\\n⚠️ Assurez-vous d'avoir sauvegardé via le menu de l'émulateur (Save State) ou vous perdrez votre progression récente !")) {
+       return;
+    }
+
     if (typeof AudioManager !== 'undefined') {
       AudioManager.playClick();
-      AudioManager.playAppLaunchTransition(null, null);
+      AudioManager.playAppLaunchTransition(null, 'gbaBgm');
     }
     
     const elapsedMs = Date.now() - currentN64EmuStartTime;

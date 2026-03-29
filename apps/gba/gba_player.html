@@ -68,7 +68,14 @@
                 'rewind': 'false' 
             };
             
-            window.EJS_fixedSaveInterval = 5000;
+            window.EJS_fixedSaveInterval = 2000;
+
+            window.addEventListener('beforeunload', (e) => {
+                const msg = "Attention : vos sauvegardes en jeu récentes risquent d'être perdues. Veuillez utiliser le menu de sauvegarde (Save State) de l'émulateur avant de quitter !";
+                e.preventDefault();
+                e.returnValue = msg;
+                return msg;
+            });
 
             // UI Enhancement: Show controls on the sides if there's space
             const keysOverlay = document.createElement('div');
